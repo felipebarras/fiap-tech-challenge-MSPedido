@@ -1,0 +1,39 @@
+services:
+  pedido-db:
+    image: postgres:15
+    container_name: pedido_db
+    environment:
+      POSTGRES_DB: pedidos_db
+      POSTGRES_USER: pedidos_user
+      POSTGRES_PASSWORD: pedido_pass
+    volumes:
+      - pedido_db_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - '5433:5432' # porta padrão afim de evitar conflitos com o banco principal
+    networks:
+      - pedido_network
+
+  pedido-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: pedido_service
+    environment:
+      POSTGRES_DB: pedidos_db
+      POSTGRES_USER: pedidos_user
+      POSTGRES_PASSWORD: pedido_pass
+      POSTGRES_HOST: pedido-db
+      POSTGRES_PORT: 5432
+    ports:
+      - '3001:3000'
+    depends_on:
+      - pedido-db
+    networks:
+      - pedido_network
+
+volumes:
+  pedido_db_data:
+
+networks:
+  pedido_network:
