@@ -1,42 +1,41 @@
-const pool = require('../config/database');
+const connectToMongo = require('../config/database');
 
 async function criarPedido(data) {
-  const { cliente, itens } = data;
-  const query = `
-    INSERT INTO pedidos (cliente, itens, status)
-    VALUES ($1, $2, $3)
-    RETURNING *;
-  `;
+  const db = await connectToMongo();
+  const collection = db.collection('pedidos');
 
-  const values = [cliente, JSON.stringify(itens), `Aguardando Pagamento`];
-  const result = await pool.query(query, values);
+  const novoPedido = {
+    cliente: data.cliente,
+    itens: data.itens,
+    status: 'Aguardando Pagamento',
+    data: new Date()
+  };
 
-  return result.rows[0];
+  try {
+    const result = await collection.insertOne(novoPedido);
+    return result.ops[0];
+  } catch (err) {
+    console.error(`Erro ao executar a query: ${err}`);
+    throw err;
+  }
 }
 
 async function listarPedidos() {
-  const { rows } = await pool.query('SELECT * FROM pedidos');
+  const db = await connectToMongo();
+  const collection = db.collection('pedidos');
 
-  return rows;
+  const pedidos = await collection.find().toArray();
+
+  return pedidos;
 }
 
 async function buscarPedido(id) {
-  const result = await pool.query('SELECT * FROM pedidos WHERE id = $1', [id]);
+  const db = await connectToMongo();
+  const collection = db.collection('pedidos');
 
-  return result.rows[0];
+  const pedido = await collection.findOne({ _id: new ObjectId(id) });
+
+  return pedido;
 }
 
-async function atualizarStatus(id, status) {
-  const query = `
-  UPDATE Pedidos
-  Set status = $1
-  WHERE id = $2
-  RETURNING *;
-  `;
-
-  const { rows } = await pool.query(query, [status, id]);
-
-  return rows[0];
-}
-
-module.exports = { criarPedido, listarPedidos, buscarPedido, atualizarStatus };
+module.exports = { criarPedido, listarPedidos, buscarPedido };
