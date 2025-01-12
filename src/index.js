@@ -1,15 +1,13 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const pedidoController = require('./controllers/pedidoController');
 require('dotenv').config();
 
 const app = express();
-app.use(bodyParser.json());
 
-const PORT = process.env.PORT || 3000;
-
+app.use(express.json());
 app.use('/pedidos', pedidoController);
 
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
+  console.log(`Microsserviço rodando na porta ${PORT}`);
 });
