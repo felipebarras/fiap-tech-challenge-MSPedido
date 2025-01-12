@@ -1,15 +1,11 @@
 services:
   pedido-db:
-    image: postgres:15
+    image: mongo:6
     container_name: pedido_db
-    environment:
-      POSTGRES_DB: pedidos_db
-      POSTGRES_USER: pedidos_user
-      POSTGRES_PASSWORD: pedido_pass
     ports:
-      - '5433:5432' # porta padrão afim de evitar conflitos com o banco principal
+      - '27017:27017'
     volumes:
-      - ./:/docker-entrypoint-initdb.d/
+      - pedido_db_data:/data/db
 
   pedido-service:
     build:
@@ -17,11 +13,7 @@ services:
       dockerfile: Dockerfile
     container_name: pedido_service
     environment:
-      POSTGRES_DB: pedidos_db
-      POSTGRES_USER: pedidos_user
-      POSTGRES_PASSWORD: pedido_pass
-      POSTGRES_HOST: pedido-db
-      POSTGRES_PORT: 5432
+      MONGO_URI: mongodb://pedido-db:27017/pedidos_db
     ports:
       - '3001:3000'
     depends_on:
