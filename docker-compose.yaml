@@ -9,7 +9,7 @@ services:
     ports:
       - '5433:5432' # porta padrão afim de evitar conflitos com o banco principal
     volumes:
-      - pedido_db_data:/var/lib/postgresql/data
+      - ./:/docker-entrypoint-initdb.d/
 
   pedido-service:
     build:
