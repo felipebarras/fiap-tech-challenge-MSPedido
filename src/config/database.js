@@ -1,21 +1,23 @@
-const { Pool } = require('pg');
-require('dotenv').config();
+const { MongoClient } = require('mongodb');
 
-const pool = new Pool({
-  user: process.env.POSTGRES_USER || 'pedidos_user',
-  host: process.env.POSTGRES_HOST || 'localhost',
-  database: process.env.POSTGRES_DB || 'pedidos_db',
-  password: process.env.POSTGRES_PASSWORD || 'pedido_pass',
-  port: process.env.POSTGRES_PORT || 5432
-});
+const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/pedidos_db';
 
-pool.on('connect', () => {
-  console.log('Conexão com banco de dados estabelecida');
-});
+let db;
 
-pool.on('error', (err) => {
-  console.error(`Erro inesperado no pool de conexão: ${err}`);
-  process.exit(-1);
-});
+async function connectToMongo() {
+  if (db) return db;
 
-module.exports = pool;
+  try {
+    const client = new MongoClient(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+    await client.connect();
+    console.log('Conectado no MongoDB com sucesso.');
+    db = client.db();
+
+    return db;
+  } catch (err) {
+    console.log(`Erro ao se conectar no MongoDB: ${err}`);
+    throw err;
+  }
+}
+
+module.exports = connectToMongo;
