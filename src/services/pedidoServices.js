@@ -3,7 +3,7 @@ const pool = require('../config/database');
 async function criarPedido(data) {
   const { cliente, itens } = data;
   const query = `
-    INSERT INTO pedidos (cliente, itens)
+    INSERT INTO pedidos (cliente, itens, status)
     VALUES ($1, $2, $3)
     RETURNING *;
   `;

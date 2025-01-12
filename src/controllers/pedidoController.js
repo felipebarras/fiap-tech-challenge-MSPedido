@@ -4,8 +4,15 @@ const router = express.Router();
 
 router.post('/', async (req, res) => {
   const { cliente, itens } = req.body;
-  const pedido = criarPedido({ cliente, itens });
-  res.status(201).json(pedido);
+  if (!cliente || !itens || itens.length === 0) return res.status(400).json({ message: 'Clientes e itens sâo obrigatórios' });
+
+  try {
+    const pedido = criarPedido({ cliente, itens });
+    res.status(201).json(pedido);
+  } catch (err) {
+    console.error(`Erro ao criar pedido: ${err}`);
+    res.status(500).json({ message: 'Erro ao criar pedido' });
+  }
 });
 
 router.get('/', async (req, res) => {
