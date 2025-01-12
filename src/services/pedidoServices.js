@@ -14,10 +14,29 @@ async function criarPedido(data) {
   return result.rows[0];
 }
 
+async function listarPedidos() {
+  const { rows } = await pool.query('SELECT * FROM pedidos');
+
+  return rows;
+}
+
 async function buscarPedido(id) {
   const result = await pool.query('SELECT * FROM pedidos WHERE id = $1', [id]);
 
   return result.rows[0];
 }
 
-module.exports = { criarPedido, buscarPedido };
+async function atualizarStatus(id, status) {
+  const query = `
+  UPDATE Pedidos
+  Set status = $1
+  WHERE id = $2
+  RETURNING *;
+  `;
+
+  const { rows } = await pool.query(query, [status, id]);
+
+  return rows[0];
+}
+
+module.exports = { criarPedido, listarPedidos, buscarPedido, atualizarStatus };
