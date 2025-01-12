@@ -13,7 +13,9 @@ async function criarPedido(data) {
 
   try {
     const result = await collection.insertOne(novoPedido);
-    return result.ops[0];
+    console.log(`Pedido inserido com sucesso: ${result.insertedId}`);
+
+    return { ...novoPedido, _id: result.insertedId };
   } catch (err) {
     console.error(`Erro ao executar a query: ${err}`);
     throw err;
@@ -24,9 +26,15 @@ async function listarPedidos() {
   const db = await connectToMongo();
   const collection = db.collection('pedidos');
 
-  const pedidos = await collection.find().toArray();
+  try {
+    const pedidos = await collection.find().toArray();
+    console.log(`Pedidos listados: ${pedidos}`);
 
-  return pedidos;
+    return pedidos;
+  } catch (err) {
+    console.error(`Erro ao listar pedidos: ${err}`);
+    throw err;
+  }
 }
 
 async function buscarPedido(id) {
