@@ -1,3 +1,5 @@
+const Pedido = require('../domain/Pedido');
+
 class PedidoService {
   constructor(pedidoRepository) {
     this.pedidoRepository = pedidoRepository;
