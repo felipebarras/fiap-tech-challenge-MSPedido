@@ -1,7 +1,5 @@
 const { MongoClient } = require('mongodb');
-require('dotenv').config();
-
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/pedidos_db';
+const { mongoURI } = require('../../shared/env');
 
 let db;
 
@@ -9,7 +7,7 @@ async function connectToMongo() {
   if (db) return db;
 
   try {
-    const client = new MongoClient(MONGO_URI);
+    const client = new MongoClient(mongoURI);
     await client.connect();
     console.log('Conectado no MongoDB com sucesso.');
     db = client.db();
@@ -20,6 +18,8 @@ async function connectToMongo() {
     throw err;
   }
 }
+
+module.exports = connectToMongo;
 
 // if (require.main === module) {
 //   (async () => {
@@ -33,5 +33,3 @@ async function connectToMongo() {
 //     }
 //   })();
 // }
-
-module.exports = connectToMongo;
