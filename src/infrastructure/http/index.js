@@ -1,6 +1,7 @@
 const express = require('express');
 const connectToMongo = require('../database/database');
 const MongoPedidoRepository = require('../database/MongoPedidoRepository');
+const PedidoGateway = require('../../application/adapters/PedidoGateway');
 const PedidoService = require('../../application/PedidoService');
 const PedidoController = require('./PedidoController');
 const { port } = require('../../shared/env');
@@ -11,7 +12,8 @@ const { port } = require('../../shared/env');
 
   const db = await connectToMongo();
   const pedidoRepository = new MongoPedidoRepository(db);
-  const pedidoService = new PedidoService(pedidoRepository);
+  const pedidoGateway = new PedidoGateway(pedidoRepository);
+  const pedidoService = new PedidoService(pedidoGateway);
 
   app.use('/pedidos', PedidoController(pedidoService));
 
