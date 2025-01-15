@@ -1,0 +1,102 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API de Pedidos",
+    "version": "1.0.0",
+    "description": "API para gerenciar pedidos em uma lanchonete"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Servidor local"
+    }
+  ],
+  "paths": {
+    "/pedidos": {
+      "post": {
+        "summary": "Cria um novo pedido",
+        "description": "Cria um novo pedido com os dados fornecidos.",
+        "tags": ["Pedidos"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "cliente": { "type": "string" },
+                  "itens": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "produto": { "type": "string" },
+                        "quantidade": { "type": "integer" }
+                      }
+                    }
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": ["pendente", "em_preparacao", "pronto", "entregue"]
+                  }
+                },
+                "required": ["cliente", "itens", "status"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Pedido criado com sucesso" },
+          "500": { "description": "Erro ao criar pedido" }
+        }
+      },
+      "get": {
+        "summary": "Lista os pedidos",
+        "description": "Retorna uma lista de todos os pedidos",
+        "tags": ["Pedidos"],
+        "responses": {
+          "200": {
+            "description": "Lista de pedidos retornada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "type": "object" }
+                }
+              }
+            }
+          },
+          "500": { "description": "Erro ao listar pedidos" }
+        }
+      }
+    },
+    "/pedidos/{id}": {
+      "get": {
+        "summary": "Busca pedido por ID",
+        "description": "Retorna os detalhes de um pedido específico",
+        "tags": ["Pedidos"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID do pedido a ser buscado"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalhes do pedido retornados com sucesso",
+            "content": {
+              "application/json": {
+                "schema": { "type": "object" }
+              }
+            }
+          },
+          "404": { "description": "Pedido não encontrado" },
+          "500": { "description": "Erro ao buscar pedido" }
+        }
+      }
+    }
+  }
+}
