@@ -15,7 +15,7 @@ class PedidoService {
   }
 
   async buscarPedidoPorID(id) {
-    const pedido = await this.pedidoGateway.buscarPedidosPorID(id);
+    const pedido = await this.pedidoGateway.buscarPedidoPorID(id);
     if (!pedido) {
       throw new Error('Pedido não encontrado');
     }
