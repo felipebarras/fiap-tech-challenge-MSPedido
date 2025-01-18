@@ -17,8 +17,8 @@ describe('Testes de PedidoService', () => {
 
   it('Deve listar todos os pedidos', async () => {
     const pedidos = [
-      { id: '1', cliente: 'Felipe', itens: [{ produto: 'Pizza', quantidade: 2 }], status: 'pendente' },
-      { id: '2', cliente: 'João', itens: [{ produto: 'Hamburguer', quantidade: 1 }], status: 'pago' }
+      { id: '1', cliente: 'Felipe', itens: [{ produto: 'Pizza', quantidade: 2 }], status: 'Aguardando Pagamento' },
+      { id: '2', cliente: 'João', itens: [{ produto: 'Hamburguer', quantidade: 1 }], status: 'Aguardando Pagamento' }
     ];
 
     mockPedidoGateway.listarPedidos.mockResolvedValue(pedidos);
@@ -34,29 +34,29 @@ describe('Testes de PedidoService', () => {
       id: '1',
       cliente: 'Felipe',
       itens: [{ produto: 'Pizza', quantidade: 2 }],
-      status: 'pendente'
+      status: 'Aguardando Pagamento'
     };
 
     mockPedidoGateway.buscarPedidoPorId.mockResolvedValue(pedido);
 
     const resultado = await pedidoService.buscarPedidoPorId('1');
 
-    expect(mockPedidoGateway.buscarPedidoPorId).toHaveBeenCalledWith(1);
+    expect(mockPedidoGateway.buscarPedidoPorId).toHaveBeenCalledWith('1');
     expect(resultado).toEqual(pedido);
   });
 
   it('Deve lançar um erro se o pedido não for encontrado', async () => {
-    mockPedidoGateway.buscarPedidoPorId.mockResolvedValue('999');
+    mockPedidoGateway.buscarPedidoPorId.mockResolvedValue(null);
 
-    await expect(pedidoService.buscarPedidoPorId('1')).rejects.toThrow('Pedido não encontrado');
-    expect(mockPedidoGateway.buscarPedidoPorId).toHaveBeenCalledWith('1');
+    await expect(pedidoService.buscarPedidoPorId('999')).rejects.toThrow('Pedido não encontrado.');
+    expect(mockPedidoGateway.buscarPedidoPorId).toHaveBeenCalledWith('999');
   });
 
   it('Deve criar um pedido novo', async () => {
     const novoPedido = {
       cliente: 'Karen',
       itens: [{ produto: 'Esfiha', quantidade: 5 }],
-      status: 'pendente'
+      status: 'Aguardando Pagamento'
     };
 
     mockPedidoGateway.salvarPedido.mockResolvedValue({ id: '3', ...novoPedido });
