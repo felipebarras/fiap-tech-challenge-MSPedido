@@ -14,8 +14,13 @@ class PedidoService {
     return await this.pedidoGateway.listarPedidos();
   }
 
-  async buscarPedidosPorID(id) {
-    return await this.pedidoGateway.buscarPedidosPorID(id);
+  async buscarPedidoPorId(id) {
+    const pedido = await this.pedidoGateway.buscarPedidoPorId(id);
+    if (!pedido) {
+      throw new Error('Pedido não encontrado.');
+    }
+
+    return pedido;
   }
 }
 

@@ -18,9 +18,8 @@ class PedidoGateway {
     return await this.pedidoRepository.listarPedidos();
   }
 
-  async buscarPedidosPorID(id) {
-    // o ID precisaria estar adaptado?
-    return await this.pedidoRepository.buscarPedidosPorID(id);
+  async buscarPedidoPorId(id) {
+    return await this.pedidoRepository.buscarPedidosPorId(id);
   }
 }
 

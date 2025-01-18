@@ -7,7 +7,7 @@ class PedidoRepository {
     throw new Error('Método não implementado ainda');
   }
 
-  async buscarPedidosPorID(id) {
+  async buscarPedidoPorId(id) {
     throw new Error('Método não implementado ainda');
   }
 }

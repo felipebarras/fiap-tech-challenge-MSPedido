@@ -16,7 +16,7 @@ class MongoPedidoRepository extends PedidoRepository {
     return await this.collection.find().toArray();
   }
 
-  async buscarPedidosPorID(id) {
+  async buscarPedidoPorId(id) {
     return await this.collection.findOne({ _id: new ObjectId(id) });
   }
 }
