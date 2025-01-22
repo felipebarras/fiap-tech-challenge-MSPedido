@@ -2,68 +2,97 @@ const PedidoService = require('../src/application/PedidoService');
 const MongoPedidoRepository = require('../src/infrastructure/database/MongoPedidoRepository');
 
 describe('Testes de PedidoService', () => {
-  let pedidoService, mockPedidoGateway;
+  let pedidoService, mockPedidoRepository;
 
-  beforeEach(() => {
-    mockPedidoGateway = {
-      criarPedido: jest.fn(),
-      salvarPedido: jest.fn(),
+  beforeAll(() => {
+    mockPedidoRepository = {
       listarPedidos: jest.fn(),
-      buscarPedidoPorId: jest.fn()
+      criarPedido: jest.fn(),
+      buscarPedidoPorId: jest.fn(),
+      integrarComOutraAPI: jest.fn()
     };
 
-    pedidoService = new PedidoService(mockPedidoGateway);
+    pedidoService = new PedidoService(mockPedidoRepository);
   });
 
-  it('Deve listar todos os pedidos', async () => {
-    const pedidos = [
-      { id: '1', cliente: 'Felipe', itens: [{ produto: 'Pizza', quantidade: 2 }], status: 'Aguardando Pagamento' },
-      { id: '2', cliente: 'João', itens: [{ produto: 'Hamburguer', quantidade: 1 }], status: 'Aguardando Pagamento' }
-    ];
+  it('Deve listar os pedidos', async () => {
+    const pedidos = [{ id: '1', cliente: 'Felipe', itens: [{ produto: 'Hamburguer', quantidade: 2 }], status: 'Aguardando Pagamento' }];
 
-    mockPedidoGateway.listarPedidos.mockResolvedValue(pedidos);
+    mockPedidoRepository.listarPedidos.mockResolvedValues(pedidos);
 
-    const resultado = await pedidoService.listarPedidos();
+    const result = await pedidoService.listarPedidos();
 
-    expect(mockPedidoGateway.listarPedidos).toHaveBeenCalled();
-    expect(resultado).toEqual(pedidos);
+    expect(result).toEqual(pedidos);
+    expect(mockPedidoRepository.listarPedidos).toHaveBeenCalled();
+  });
+
+  it('Deve lançar um erro ao listar pedidos com erro', async () => {
+    mockPedidoRepository.listarPedidos.mockRejectedValue(new Error('Erro ao listar pedidos'));
+
+    await expect(pedidoService.listarPedidos()).rejects.toThrow('Erro ao listar pedidos');
+  });
+
+  it('Deve criar um novo pedido', async () => {
+    const novoPedido = { cliente: 'Karen', itens: [{ produto: 'Pizza', quantidade: 1 }] };
+    const pedidoCriado = { id: '2', ...novoPedido, status: 'Aguardando Pagamento' };
+
+    mockPedidoRepository.criarPedido.mockResolvedValues(pedidoCriado);
+
+    const result = await pedidoService.criarPedido(novoPedido);
+
+    expect(result).toEqual(pedidoCriado);
+    expect(mockPedidoRepository.criarPedido).toHaveBeenCalledWith(novoPedido);
+  });
+
+  it('Deve retornar um erro ao criar novo pedido com erro', async () => {
+    const novoPedido = { cliente: 'Karen', itens: [{ produto: 'Pizza', quantidade: 1 }] };
+    mockPedidoRepository.criarPedido.mockRejectedValue(new Error('Erro ao criar pedido'));
+
+    await expect(pedidoService.criarPedido(novoPedido)).rejects.toThrow('Erro ao criar pedido');
   });
 
   it('Deve buscar um pedido por seu ID', async () => {
-    const pedido = {
-      id: '1',
-      cliente: 'Felipe',
-      itens: [{ produto: 'Pizza', quantidade: 2 }],
-      status: 'Aguardando Pagamento'
-    };
+    const pedido = { id: '1', cliente: 'Felipe', itens: [{ produto: 'Hamburguer', quantidade: 2 }], status: 'Aguardando Pagamento' };
 
-    mockPedidoGateway.buscarPedidoPorId.mockResolvedValue(pedido);
+    mockPedidoRepository.buscarPedidoPorId.mockResolvedValues(pedido);
 
-    const resultado = await pedidoService.buscarPedidoPorId('1');
+    const result = await pedidoService.buscarPedidoPorId('1');
 
-    expect(mockPedidoGateway.buscarPedidoPorId).toHaveBeenCalledWith('1');
-    expect(resultado).toEqual(pedido);
+    expect(result).toEqual(pedido);
+    expect(mockPedidoRepository.buscarPedidoPorId).toHaveBeenCalledWith('1');
   });
 
-  it('Deve lançar um erro se o pedido não for encontrado', async () => {
-    mockPedidoGateway.buscarPedidoPorId.mockResolvedValue(null);
+  it('Deve retornar um erro se não encontrar o pedido com o ID', async () => {
+    const pedido = { id: '1', cliente: 'Felipe', itens: [{ produto: 'Hamburguer', quantidade: 2 }], status: 'Aguardando Pagamento' };
 
-    await expect(pedidoService.buscarPedidoPorId('999')).rejects.toThrow('Pedido não encontrado.');
-    expect(mockPedidoGateway.buscarPedidoPorId).toHaveBeenCalledWith('999');
+    mockPedidoRepository.buscarPedidoPorId.mockResolvedValues(pedido);
+    await expect(pedidoService.buscarPedidoPorId('3')).rejects.toThrow('Pedido não encontrado');
   });
 
-  it('Deve criar um pedido novo', async () => {
-    const novoPedido = {
-      cliente: 'Karen',
-      itens: [{ produto: 'Esfiha', quantidade: 5 }],
-      status: 'Aguardando Pagamento'
-    };
+  it('Deve retornar um erro ao buscar um pedido com erro', async () => {
+    mockPedidoRepository.buscarPedidoPorId.mockRejectedValue(new Error('Erro ao buscar pedido'));
 
-    mockPedidoGateway.salvarPedido.mockResolvedValue({ id: '3', ...novoPedido });
+    await expect(pedidoService.buscarPedidoPorId('1')).rejects.toThrow('Erro ao buscar pedido');
+  });
 
-    const pedidoCriado = await pedidoService.criarPedido(novoPedido);
+  it('Deve integrar com uma API baseando em sua URL', async () => {
+    const pedido = { id: '1', cliente: 'Felipe', itens: [{ produto: 'Hamburguer', quantidade: 2 }], status: 'Aguardando Pagamento' };
+    const apiURL = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXX';
 
-    expect(mockPedidoGateway.salvarPedido).toHaveBeenCalledWith(expect.any(Object));
-    expect(pedidoCriado).toEqual({ id: '3', ...novoPedido });
+    mockPedidoRepository.integrarComOutraAPI.mockResolvedValues(pedido);
+
+    const result = await pedidoService.integrarComOutraAPI(apiURL);
+
+    expect(result).toEqual(pedido);
+    expect(mockPedidoRepository.integrarComOutraAPI).toHaveBeenCalledWith(apiURL);
+  });
+
+  it('Deve retornar um erro ao integrar a API com erro', async () => {
+    const apiURL = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXX';
+
+    mockPedidoRepository.integrarComOutraAPI.mockRejectedValue(new Error('Erro ao integrar com API'));
+
+    await expect(pedidoService.integrarComOutraAPI(apiURL)).rejects.toThrow('Erro ao integrar com API');
+    expect(mockPedidoRepository.integrarComOutraAPI).toHaveBeenCalledWith(apiURL);
   });
 });
