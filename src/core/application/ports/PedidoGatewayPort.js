@@ -1,15 +1,7 @@
 class PedidoGatewayPort {
-  async salvarPedido(pedido) {
-    throw new Error('Método não implementado ainda');
-  }
-
-  async listarPedidos() {
-    throw new Error('Método não implementado ainda');
-  }
-
-  async buscarPedidoPorId(id) {
-    throw new Error('Método não implementado ainda');
+  enviarDados(dados) {
+    throw new Error('Método ainda não implementado');
   }
 }
 
-module.exports = PedidoRepository;
+module.exports = PedidoGatewayPort;

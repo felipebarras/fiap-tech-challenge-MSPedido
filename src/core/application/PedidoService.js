@@ -1,26 +1,48 @@
 const Pedido = require('../domain/Pedido');
 
 class PedidoService {
-  constructor(pedidoGateway) {
-    this.pedidoGateway = pedidoGateway;
+  constructor(pedidoRepository, pedidoGatewayPort) {
+    this.pedidoRepository = pedidoRepository; // comunicação com banco de dados
+    this.pedidoGatewayPort = pedidoGatewayPort; // comunicação com APIs externas
   }
 
-  async criarPedido(data) {
-    const pedido = new Pedido(data.cliente, data.itens);
-    return await this.pedidoGateway.salvarPedido(pedido);
+  async criarPedido(pedido) {
+    try {
+      return await this.pedidoRepository.criarPedido(pedido);
+    } catch (err) {
+      console.error(`Erro ao criar pedido: ${err}`);
+      throw new Error(`Erro ao criar pedido`);
+    }
   }
 
   async listarPedidos() {
-    return await this.pedidoGateway.listarPedidos();
+    try {
+      return await this.pedidoRepository.listarPedidos();
+    } catch (err) {
+      console.error(`Erro ao listar pedidos: ${err}`);
+      throw new Error(`Erro ao listar pedidos`);
+    }
   }
 
   async buscarPedidoPorId(id) {
-    const pedido = await this.pedidoGateway.buscarPedidoPorId(id);
-    if (!pedido) {
-      throw new Error('Pedido não encontrado.');
-    }
+    try {
+      const pedido = await this.pedidoRepository.buscarPedidoPorId(id);
+      if (!pedido) throw new Error('Pedido não encontrado');
 
-    return pedido;
+      return pedido;
+    } catch (err) {
+      console.error(`Erro ao buscar pedido por ID: ${err}`);
+      throw new Error(`Erro ao buscar pedido por ID`);
+    }
+  }
+
+  async integrarComOutraAPI(data) {
+    try {
+      return await this.pedidoGatewayPort.integrarComOutraAPI(data);
+    } catch (err) {
+      console.error(`Erro ao comunicar com outra API: ${err}`);
+      throw new Error(`Erro ao comunicar com outra API`);
+    }
   }
 }
 
