@@ -62,9 +62,8 @@ describe('Testes de PedidoService', () => {
   });
 
   it('Deve retornar um erro se não encontrar o pedido com o ID', async () => {
-    const pedido = { id: '1', cliente: 'Felipe', itens: [{ produto: 'Hamburguer', quantidade: 2 }], status: 'Aguardando Pagamento' };
+    mockPedidoRepository.buscarPedidoPorId.mockResolvedValue(null);
 
-    mockPedidoRepository.buscarPedidoPorId.mockResolvedValue(pedido);
     await expect(pedidoService.buscarPedidoPorId('3')).rejects.toThrow('Pedido não encontrado');
   });
 
@@ -89,8 +88,8 @@ describe('Testes de PedidoService', () => {
   it('Deve lançar erro ao integrar com outra API', async () => {
     const apiURL = 'http://fake-api.com';
 
-    mockPedidoRepository.integrarComOutraAPI.mockRejectedValue(new Error('Erro ao integrar com outra API'));
+    mockPedidoRepository.integrarComOutraAPI.mockRejectedValue(new Error('Erro ao comunicar com outra API'));
 
-    await expect(pedidoService.integrarComOutraAPI(apiURL)).rejects.toThrow('Erro ao integrar com outra API');
+    await expect(pedidoService.integrarComOutraAPI(apiURL)).rejects.toThrow('Erro ao comunicar com outra API');
   });
 });

@@ -37,7 +37,7 @@ describe('Testes de PedidoController', () => {
     const response = await request(app).get('/pedidos');
 
     expect(response.status).toBe(500);
-    expect(response.body).toEqual({ message: 'Erro ao listar pedidos' });
+    expect(response.body).toEqual({ error: 'Erro ao listar pedidos' });
   });
 
   it('Deve criar um novo pedido', async () => {
@@ -98,10 +98,10 @@ describe('Testes de PedidoController', () => {
   });
 
   it('Deve retornar 500 ao integrar com APIs com erro', async () => {
-    const apiResponse = { message: 'Erro ao integrar com API' };
+    const apiResponse = { message: 'Erro ao comunicar com outra API' };
     const apiURL = 'http://fake-api.com';
 
-    mockPedidoService.integrarComOutraAPI.mockRejectedValue(new Error('Erro ao integrar com API'));
+    mockPedidoService.integrarComOutraAPI.mockRejectedValue(new Error('Erro ao comunicar com outra API'));
 
     const response = await request(app).get(`pedidos/integrar/${apiURL}`);
 
