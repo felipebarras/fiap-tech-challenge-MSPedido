@@ -1,23 +1,21 @@
-const { ObjectId } = require('mongodb');
-const PedidoRepository = require('../../application/interfaces/PedidoRepository');
+const PedidoRepositoryPort = require('../../core/application/ports/PedidoRepositoryPort');
 
-class MongoPedidoRepository extends PedidoRepository {
-  constructor(db) {
+class MongoPedidoRepository extends PedidoRepositoryPort {
+  constructor(database) {
     super();
-    this.collection = db.collection('pedidos');
+    this.database = database;
   }
 
   async salvarPedido(pedido) {
-    const result = await this.collection.insertOne(pedido);
-    return { ...pedido, _id: result.insertedId };
+    return this.database.collection('pedidos').insertOne(pedido);
   }
 
   async listarPedidos() {
-    return await this.collection.find().toArray();
+    return await this.database.collection('pedidos').find().toArray();
   }
 
   async buscarPedidoPorId(id) {
-    return await this.collection.findOne({ _id: new ObjectId(id) });
+    return await this.database.collection('pedidos').findOne({ id });
   }
 }
 

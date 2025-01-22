@@ -1,10 +1,9 @@
-const PedidoService = require('../src/application/PedidoService');
-const MongoPedidoRepository = require('../src/infrastructure/database/MongoPedidoRepository');
+const PedidoService = require('../../src/core/application/services/PedidoService');
 
 describe('Testes de PedidoService', () => {
   let pedidoService, mockPedidoRepository;
 
-  beforeAll(() => {
+  beforeEach(() => {
     mockPedidoRepository = {
       listarPedidos: jest.fn(),
       criarPedido: jest.fn(),
@@ -18,7 +17,7 @@ describe('Testes de PedidoService', () => {
   it('Deve listar os pedidos', async () => {
     const pedidos = [{ id: '1', cliente: 'Felipe', itens: [{ produto: 'Hamburguer', quantidade: 2 }], status: 'Aguardando Pagamento' }];
 
-    mockPedidoRepository.listarPedidos.mockResolvedValues(pedidos);
+    mockPedidoRepository.listarPedidos.mockResolvedValue(pedidos);
 
     const result = await pedidoService.listarPedidos();
 
@@ -36,7 +35,7 @@ describe('Testes de PedidoService', () => {
     const novoPedido = { cliente: 'Karen', itens: [{ produto: 'Pizza', quantidade: 1 }] };
     const pedidoCriado = { id: '2', ...novoPedido, status: 'Aguardando Pagamento' };
 
-    mockPedidoRepository.criarPedido.mockResolvedValues(pedidoCriado);
+    mockPedidoRepository.criarPedido.mockResolvedValue(pedidoCriado);
 
     const result = await pedidoService.criarPedido(novoPedido);
 
@@ -54,7 +53,7 @@ describe('Testes de PedidoService', () => {
   it('Deve buscar um pedido por seu ID', async () => {
     const pedido = { id: '1', cliente: 'Felipe', itens: [{ produto: 'Hamburguer', quantidade: 2 }], status: 'Aguardando Pagamento' };
 
-    mockPedidoRepository.buscarPedidoPorId.mockResolvedValues(pedido);
+    mockPedidoRepository.buscarPedidoPorId.mockResolvedValue(pedido);
 
     const result = await pedidoService.buscarPedidoPorId('1');
 
@@ -65,7 +64,7 @@ describe('Testes de PedidoService', () => {
   it('Deve retornar um erro se não encontrar o pedido com o ID', async () => {
     const pedido = { id: '1', cliente: 'Felipe', itens: [{ produto: 'Hamburguer', quantidade: 2 }], status: 'Aguardando Pagamento' };
 
-    mockPedidoRepository.buscarPedidoPorId.mockResolvedValues(pedido);
+    mockPedidoRepository.buscarPedidoPorId.mockResolvedValue(pedido);
     await expect(pedidoService.buscarPedidoPorId('3')).rejects.toThrow('Pedido não encontrado');
   });
 
@@ -76,23 +75,22 @@ describe('Testes de PedidoService', () => {
   });
 
   it('Deve integrar com uma API baseando em sua URL', async () => {
-    const pedido = { id: '1', cliente: 'Felipe', itens: [{ produto: 'Hamburguer', quantidade: 2 }], status: 'Aguardando Pagamento' };
-    const apiURL = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXX';
+    const apiResponse = { message: 'Integração realizada com sucesso' };
+    const apiURL = 'http://fake-api.com';
 
-    mockPedidoRepository.integrarComOutraAPI.mockResolvedValues(pedido);
+    mockPedidoRepository.integrarComOutraAPI.mockResolvedValue(apiResponse);
 
     const result = await pedidoService.integrarComOutraAPI(apiURL);
 
-    expect(result).toEqual(pedido);
+    expect(result).toEqual(apiResponse);
     expect(mockPedidoRepository.integrarComOutraAPI).toHaveBeenCalledWith(apiURL);
   });
 
-  it('Deve retornar um erro ao integrar a API com erro', async () => {
-    const apiURL = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXX';
+  it('Deve lançar erro ao integrar com outra API', async () => {
+    const apiURL = 'http://fake-api.com';
 
-    mockPedidoRepository.integrarComOutraAPI.mockRejectedValue(new Error('Erro ao integrar com API'));
+    mockPedidoRepository.integrarComOutraAPI.mockRejectedValue(new Error('Erro ao integrar com outra API'));
 
-    await expect(pedidoService.integrarComOutraAPI(apiURL)).rejects.toThrow('Erro ao integrar com API');
-    expect(mockPedidoRepository.integrarComOutraAPI).toHaveBeenCalledWith(apiURL);
+    await expect(pedidoService.integrarComOutraAPI(apiURL)).rejects.toThrow('Erro ao integrar com outra API');
   });
 });

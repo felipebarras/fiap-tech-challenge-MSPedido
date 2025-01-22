@@ -1,9 +1,6 @@
-const Pedido = require('../domain/Pedido');
-
 class PedidoService {
-  constructor(pedidoRepository, pedidoGatewayPort) {
-    this.pedidoRepository = pedidoRepository; // comunicação com banco de dados
-    this.pedidoGatewayPort = pedidoGatewayPort; // comunicação com APIs externas
+  constructor(pedidoRepository) {
+    this.pedidoRepository = pedidoRepository;
   }
 
   async criarPedido(pedido) {
@@ -38,7 +35,7 @@ class PedidoService {
 
   async integrarComOutraAPI(data) {
     try {
-      return await this.pedidoGatewayPort.integrarComOutraAPI(data);
+      return await this.pedidoRepository.integrarComOutraAPI(data);
     } catch (err) {
       console.error(`Erro ao comunicar com outra API: ${err}`);
       throw new Error(`Erro ao comunicar com outra API`);

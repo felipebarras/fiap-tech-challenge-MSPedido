@@ -1,6 +1,6 @@
 const express = require('express');
 const request = require('supertest');
-const PedidoController = require('../src/adapter/driver/PedidoController');
+const PedidoController = require('../../src/adapter/driver/PedidoController');
 
 describe('Testes de PedidoController', () => {
   let app, mockPedidoService;
@@ -16,7 +16,6 @@ describe('Testes de PedidoController', () => {
       integrarComOutraAPI: jest.fn()
     };
 
-    // inicializa o controller com o service mockado
     app.use('/pedidos', PedidoController(mockPedidoService));
   });
 
@@ -86,23 +85,28 @@ describe('Testes de PedidoController', () => {
   });
 
   it('Deve integrar com uma API baseando em sua URL', async () => {
-    const mockResultado = { message: 'Integração realizada com sucesso' };
-    mockPedidoService.integrarComOutraAPI.mockResolvedValue(mockResultado);
+    const apiResponse = { message: 'Integração realizada com sucesso' };
+    const apiURL = 'http://fake-api.com';
 
-    const response = await request(app).get('/pedidos/integrar/XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
+    mockPedidoService.integrarComOutraAPI.mockResolvedValue(apiResponse);
 
-    expect(resultado.status).toBe(200);
-    expect(resultado.body).toEqual(mockResultado);
-    expect(mockPedidoService.integrarComOutraAPI).toHaveBeenCalledWith('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
+    const response = await request(app).get(`pedidos/integrar/${apiURL}`);
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual(apiResponse);
+    expect(mockPedidoService.integrarComOutraAPI).toHaveBeenCalledWith(apiURL);
   });
 
   it('Deve retornar 500 ao integrar com APIs com erro', async () => {
+    const apiResponse = { message: 'Erro ao integrar com API' };
+    const apiURL = 'http://fake-api.com';
+
     mockPedidoService.integrarComOutraAPI.mockRejectedValue(new Error('Erro ao integrar com API'));
 
-    const response = await request(app).get('/pedidos/integrar/XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
+    const response = await request(app).get(`pedidos/integrar/${apiURL}`);
 
     expect(response.status).toBe(500);
-    expect(response.body).toEqual({ message: 'Erro ao integrar com API' });
-    expect(mockPedidoService.integrarComOutraAPI).toHaveBeenCalledWith('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX');
+    expect(response.body).toEqual(apiResponse);
+    expect(mockPedidoService.integrarComOutraAPI).toHaveBeenCalledWith(apiURL);
   });
 });

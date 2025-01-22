@@ -1,10 +1,15 @@
 const express = require('express');
-const { port } = require('../../shared/env');
-const pedidoController = require('./PedidoController');
+const PedidoService = require('../../core/application/services/PedidoService');
+const MongoPedidoRepository = require('../driven/MongoPedidoRepository');
+const PedidoController = require('./PedidoController');
+const database = require('../driven/database');
 
 const app = express();
-
 app.use(express.json());
-app.use('/pedidos', pedidoController);
 
-app.listen(port, () => console.log(`Servidor rodando na porta ${port}`));
+const pedidoRepository = new MongoPedidoRepository(database);
+const pedidoService = new PedidoService(pedidoRepository);
+
+app.use('/pedidos', PedidoController(pedidoService));
+
+module.exports = app;

@@ -1,22 +1,17 @@
 const axios = require('axios');
-const PedidoGatewayPort = require('../../core/application/ports/PedidoGatewayPort');
 
-class PedidoAPIAdapter extends PedidoGatewayPort {
+class PedidoAPIAdapter {
   constructor(apiURL) {
-    super();
     this.apiURL = apiURL;
   }
 
-  async enviarDados(data) {
+  async integrarComOutraAPI(data) {
     try {
-      const response = await axios.post(`${this.apiURL}/endpoint`, data);
-      if (response.status !== 200) throw new Error('Falha ao enviar dados para a API');
-      console.log('Dados enviados com sucesso para a API');
+      const response = await axios.post(`${this.apiURL}/integracao`, data);
 
       return response.data;
     } catch (err) {
-      console.error(`Erro ao enviar dados para a API: ${err}`);
-      throw new Error('Erro ao enviar dados para a API');
+      throw new Error(`Erro ao integrar com outra API: ${err.message}`);
     }
   }
 }
