@@ -1,4 +1,4 @@
-class PedidoRepository {
+class PedidoGatewayPort {
   async salvarPedido(pedido) {
     throw new Error('Método não implementado ainda');
   }

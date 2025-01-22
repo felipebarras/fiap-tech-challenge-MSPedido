@@ -31,13 +31,11 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          IMAGE_TAG=$(date +%Y%m%d%H%M%S)
-          echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
-          docker build -t ${{ secrets.AWS_ACCOUNT_ID }}:latest ."
+          docker build -t pedido:latest .
 
-      # AWS_ACCOUNT_ID seria o ID da conta criada da AWS.... nao sei se é necessario colocá-la como secret ou dar um hardcode nela
-      # ECR_REPOSITORY seria a pasta ECR criada
       - name: Push Docker Image to Amazon ECR
-        run: docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:$IMAGE_TAG
-      # a imagem teria um nome marromeno assim:
-      # 123456789012.dkr.ecr.us-east-1.amazonaws.com/nome-repositorio:latest
+        env:
+          ECR_URL: 071989740414.dkr.ecr.us-east-1.amazonaws.com/pedido #Alterar se necessário
+        run: | 
+        docker tag pedido:latest $ECR_URL:latest
+        docker push $ECR_URL:latest
