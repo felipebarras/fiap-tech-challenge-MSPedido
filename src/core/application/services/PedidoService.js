@@ -7,6 +7,16 @@ class PedidoService {
 
   async criarPedido(pedido) {
     try {
+      // validando o cliente
+      const cliente = await this.customerAPI.buscarClientePorCPF(pedido.clienteCPF);
+      if (!cliente) throw new Error('Cliente não encontrado');
+
+      // validando produtos
+      for (const item of pedido.itens) {
+        const produto = await this.produtoAPI.consultarPorId(item.produtoId);
+        if (!produto) throw new Error('Produto não encontrado');
+      }
+
       return await this.mongoDbRepository.criarPedido(pedido);
     } catch (err) {
       console.error(`Erro ao criar pedido: ${err}`);
@@ -16,7 +26,10 @@ class PedidoService {
 
   async listarPedidos() {
     try {
-      return await this.mongoDbRepository.listarPedidos();
+      const pedidos = await this.mongoDbRepository.listarPedidos();
+      !pedidos ? console.log('Nenhum pedido encontrado') : console.log(`Pedidos encontrados: ${JSON.stringify(pedidos)}`);
+
+      return pedidos;
     } catch (err) {
       console.error(`Erro ao listar pedidos: ${err}`);
       throw new Error(`Erro ao listar pedidos`);

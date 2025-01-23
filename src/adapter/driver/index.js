@@ -1,6 +1,8 @@
 const express = require('express');
 const { connectToMongo } = require('../driven/database');
 const MongoPedidoRepository = require('../driven/MongoPedidoRepository');
+const CustomerAPIAdapter = require('../driven/CustomerAPIAdapter');
+const ProdutoAPIAdapter = require('../driven/ProdutoAPIAdapter');
 const PedidoService = require('../../core/application/services/PedidoService');
 const PedidoController = require('./PedidoController');
 const swaggerUi = require('swagger-ui-express');
@@ -13,9 +15,16 @@ app.use(express.json());
 (async () => {
   try {
     const db = await connectToMongo();
+    console.log(`Banco conectado: ${db.databaseName}`);
 
+    // Adapters
+    const customerAPIAdapter = new CustomerAPIAdapter();
+    const produtoAPIAdapter = new ProdutoAPIAdapter();
+    // Repositório
     const pedidoRepository = new MongoPedidoRepository(db);
-    const pedidoService = new PedidoService(pedidoRepository);
+    const pedidoService = new PedidoService(customerAPIAdapter, produtoAPIAdapter, pedidoRepository);
+
+    // Controller
     const pedidoController = new PedidoController(pedidoService);
 
     // rota do swagger
@@ -25,7 +34,6 @@ app.use(express.json());
     app.post('/api/v1/pedidos', (req, res, next) => pedidoController.criarPedido(req, res, next));
     app.get('/api/v1/pedidos', (req, res, next) => pedidoController.listarPedidos(req, res, next));
     app.get('/api/v1/pedidos/:id', (req, res, next) => pedidoController.buscarPedidoPorId(req, res, next));
-    app.post('/api/v1/pedidos/integrar', (req, res, next) => pedidoController.integrarComOutraAPI(req, res, next));
 
     app.listen(port, () => console.log(`Servidor rodando na porta ${port}`));
   } catch (err) {

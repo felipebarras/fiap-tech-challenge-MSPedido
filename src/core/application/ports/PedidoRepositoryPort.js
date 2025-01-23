@@ -1,5 +1,5 @@
 class PedidoRepositoryPort {
-  async salvarPedido(pedido) {
+  async criarPedido(pedido) {
     throw new Error('Método ainda não implementado');
   }
 

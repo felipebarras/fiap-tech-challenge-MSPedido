@@ -3,29 +3,45 @@ const PedidoRepositoryPort = require('../../core/application/ports/PedidoReposit
 class MongoPedidoRepository extends PedidoRepositoryPort {
   constructor(database) {
     super();
-    this.collection = database.collection('pedidos');
+    if (!database) throw new Error('Database connection not provided');
+    this.database = database;
   }
 
-  async salvarPedido(pedido) {
-    const result = await this.collection.insertOne(pedido);
-
-    return result.ops[0];
+  async criarPedido(pedido) {
+    try {
+      console.log(`Banco de dados: ${this.database}`);
+      return await this.database.collection('pedidos').insertOne(pedido);
+    } catch (err) {
+      throw new Error(`Erro ao criar pedido: ${err}`);
+    }
   }
 
   async listarPedidos() {
-    return await this.collection.find().toArray();
+    try {
+      console.log(`Banco de dados: ${this.database}`);
+      const pedidos = await this.database.collection('pedidos').find().toArray();
+
+      return pedidos;
+    } catch (err) {
+      throw new Error(`Erro ao listar pedidos: ${err}`);
+    }
   }
 
   async buscarPedidoPorId(id) {
-    return await this.collection.findOne({ id });
+    try {
+      return await this.database.collection('pedidos').findOne({ id });
+    } catch (err) {
+      throw new Error(`Erro ao buscar pedido por ID: ${err}`);
+    }
   }
 
   async integrarComOutraAPI(apiURL) {
-    // const response = await fetch(apiURL);
-    // const data = await response.json();
-
-    // return data;
-    return `Integração mockada com sucesso para os dados: ${JSON.stringify(apiURL)}`;
+    try {
+      console.log(`Integrando com a API externa: ${apiURL}`);
+      return `Integração mockada com sucesso para os dados: ${JSON.stringify(apiURL)}`;
+    } catch (err) {
+      throw new Error(`Erro ao integrar com outra API: ${err}`);
+    }
   }
 }
 
