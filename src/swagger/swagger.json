@@ -21,32 +21,24 @@
           "required": true,
           "content": {
             "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "cliente": { "type": "string" },
-                  "itens": {
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "properties": {
-                        "produto": { "type": "string" },
-                        "quantidade": { "type": "integer" }
-                      }
-                    }
-                  },
-                  "status": {
-                    "type": "string",
-                    "enum": ["pendente", "em_preparacao", "pronto", "entregue"]
-                  }
-                },
-                "required": ["cliente", "itens", "status"]
-              }
+              "schema": { "$ref": "#/components/schemas/Pedido" }
             }
           }
         },
         "responses": {
-          "201": { "description": "Pedido criado com sucesso" },
+          "201": {
+            "description": "Pedido criado com sucesso",
+            "content": {
+              "application/json": {
+                "example": {
+                  "id": "1",
+                  "cliente": "João",
+                  "itens": [{ "produto": "Pizza", "quantidade": 2 }],
+                  "status": "pendente"
+                }
+              }
+            }
+          },
           "500": { "description": "Erro ao criar pedido" }
         }
       },
@@ -61,7 +53,7 @@
               "application/json": {
                 "schema": {
                   "type": "array",
-                  "items": { "type": "object" }
+                  "items": { "$ref": "#/components/schemas/Pedido" }
                 }
               }
             }
@@ -89,13 +81,40 @@
             "description": "Detalhes do pedido retornados com sucesso",
             "content": {
               "application/json": {
-                "schema": { "type": "object" }
+                "schema": { "$ref": "#/components/schemas/Pedido" }
               }
             }
           },
           "404": { "description": "Pedido não encontrado" },
           "500": { "description": "Erro ao buscar pedido" }
         }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Pedido": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "example": "1" },
+          "cliente": { "type": "string", "example": "João" },
+          "itens": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "produto": { "type": "string", "example": "Pizza" },
+                "quantidade": { "type": "integer", "example": 2 }
+              }
+            }
+          },
+          "status": {
+            "type": "string",
+            "enum": ["pendente", "em_preparacao", "pronto", "entregue"],
+            "example": "pendente"
+          }
+        },
+        "required": ["cliente", "itens", "status"]
       }
     }
   }

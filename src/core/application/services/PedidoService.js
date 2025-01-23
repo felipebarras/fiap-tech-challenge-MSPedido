@@ -1,11 +1,13 @@
 class PedidoService {
-  constructor(pedidoRepository) {
-    this.pedidoRepository = pedidoRepository;
+  constructor(customerAPI, produtoAPI, mongoDbRepository) {
+    this.customerAPI = customerAPI;
+    this.produtoAPI = produtoAPI;
+    this.mongoDbRepository = mongoDbRepository;
   }
 
   async criarPedido(pedido) {
     try {
-      return await this.pedidoRepository.criarPedido(pedido);
+      return await this.mongoDbRepository.criarPedido(pedido);
     } catch (err) {
       console.error(`Erro ao criar pedido: ${err}`);
       throw new Error(`Erro ao criar pedido`);
@@ -14,7 +16,7 @@ class PedidoService {
 
   async listarPedidos() {
     try {
-      return await this.pedidoRepository.listarPedidos();
+      return await this.mongoDbRepository.listarPedidos();
     } catch (err) {
       console.error(`Erro ao listar pedidos: ${err}`);
       throw new Error(`Erro ao listar pedidos`);
@@ -23,7 +25,7 @@ class PedidoService {
 
   async buscarPedidoPorId(id) {
     try {
-      const pedido = await this.pedidoRepository.buscarPedidoPorId(id);
+      const pedido = await this.mongoDbRepository.buscarPedidoPorId(id);
       if (!pedido) throw new Error('Pedido não encontrado');
 
       return pedido;
@@ -35,7 +37,7 @@ class PedidoService {
 
   async integrarComOutraAPI(data) {
     try {
-      return await this.pedidoRepository.integrarComOutraAPI(data);
+      return await this.mongoDbRepository.integrarComOutraAPI(data);
     } catch (err) {
       console.error(`Erro ao comunicar com outra API: ${err}`);
       throw new Error(`Erro ao comunicar com outra API`);
