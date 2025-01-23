@@ -5,6 +5,10 @@ class Pedido {
     this.status = status;
     this.criadoEm = criadoEm;
   }
+
+  calcularTotal() {
+    return this.itens.reduce((total, item) => total + item.quantidade * item.preco, 0);
+  }
 }
 
 module.exports = Pedido;

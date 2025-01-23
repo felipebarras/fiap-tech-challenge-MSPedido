@@ -1,29 +1,27 @@
-const express = require('express');
-const connectToMongo = require('../driven/infrastructure/database');
-const MongoPedidoRepository = require('../driven/infrastructure/MongoPedidoRepository');
-const PedidoGateway = require('../../application/adapters/PedidoGateway');
-const PedidoService = require('../../application/PedidoService');
+const PedidoService = require('../../core/application/services/PedidoService');
+const MongoPedidoRepository = require('../driven/MongoPedidoRepository');
 const PedidoController = require('./PedidoController');
+const database = require('../driven/database');
+const swaggerDocument = require('../../swagger/swagger.json');
 const swaggerUi = require('swagger-ui-express');
-const swaggerDoc = require('../../swagger/swagger.json');
-const { port } = require('../../shared/env');
+const express = require('express');
 
-(async () => {
-  const app = express();
-  app.use(express.json());
+const app = express();
+app.use(express.json());
 
-  //setando o swagger
-  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
+const pedidoRepository = new MongoPedidoRepository(database);
+const pedidoService = new PedidoService(pedidoRepository);
 
-  const db = await connectToMongo();
-  const pedidoRepository = new MongoPedidoRepository(db);
-  const pedidoGateway = new PedidoGateway(pedidoRepository);
-  const pedidoService = new PedidoService(pedidoGateway);
+// integração do Swagger
+app.use('/api/v1/swagger-ui', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-  app.use('/pedidos', PedidoController(pedidoService));
+// rotas da API
+app.use('/api/v1/pedidos', PedidoController(pedidoService));
 
-  app.listen(port, () => {
-    console.log(`Microsserviço de Pedido rodando na porta ${port}`);
-    console.log(`Swagger disponível em http://localhost:${port}/api-docs`);
-  });
-})();
+// Middleware para lidar com erros
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send({ error: 'Algo deu errado no servidor!' });
+});
+
+module.exports = app;
