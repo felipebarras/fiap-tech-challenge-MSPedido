@@ -1,50 +1,52 @@
-const express = require('express');
+class PedidoController {
+  constructor(pedidoService) {
+    this.pedidoService = pedidoService;
+  }
 
-function PedidoController(pedidoService) {
-  const router = express.Router();
-
-  router.get('/', async (req, res) => {
-    try {
-      const pedidos = await pedidoService.listarPedidos();
-
-      res.status(200).json(pedidos);
-    } catch (error) {
-      res.status(500).json({ error: 'Erro ao listar pedidos' });
-    }
-  });
-
-  router.post('/', async (req, res) => {
+  async criarPedido(req, res, next) {
     try {
       const novoPedido = req.body;
-      const pedidoCriado = await pedidoService.criarPedido(novoPedido);
+      const pedidoCriado = await this.pedidoService.criarPedido(novoPedido);
 
       res.status(201).json(pedidoCriado);
-    } catch (error) {
-      res.status(500).json({ error: 'Erro ao criar pedido' });
+    } catch (err) {
+      next(err);
     }
-  });
+  }
 
-  router.get('/:id', async (req, res) => {
+  async listarPedidos(req, res, next) {
     try {
-      const pedido = await pedidoService.buscarPedidoPorId(req.params.id);
+      const pedidos = await this.pedidoService.listarPedidos();
+
+      res.status(200).json(pedidos);
+    } catch (err) {
+      next(err);
+    }
+  }
+  '';
+
+  async buscarPedidoPorId(req, res, next) {
+    try {
+      const pedidoId = req.params.id;
+      const pedido = await this.pedidoService.buscarPedidoPorId(pedidoId);
+
+      if (!pedido) return res.status(404).json({ error: 'Pedido não encontrado' });
 
       res.status(200).json(pedido);
-    } catch (error) {
-      res.status(500).json({ error: 'Erro ao buscar pedido' });
+    } catch (err) {
+      next(err);
     }
-  });
+  }
 
-  router.get('/integrar/:apiURL', async (req, res) => {
+  async integrarComOutraAPI(req, res, next) {
     try {
-      const resultado = await pedidoService.integrarComOutraAPI(req.params.apiURL);
+      const resultado = await this.pedidoService.integrarComOutraAPI(req.body);
 
-      res.status(200).json({ message: 'Integração com outra API realizada com sucesso', resultado });
-    } catch (error) {
-      res.status(500).json({ message: 'Erro ao integrar com outra API' });
+      res.status(200).json({ message: 'Integração realizada com sucesso', resultado });
+    } catch (err) {
+      next(err);
     }
-  });
-
-  return router;
+  }
 }
 
 module.exports = PedidoController;

@@ -4,7 +4,7 @@
   "description": "*******\r Sumário\r - [Objetivos](#objetivos)\r - [Requisitos do Tech Challenge](#requisitos-do-tech-challenge)\r   - [Entregáveis Fase 1](#entregáveis-fase-1)\r   - [Entregáveis Fase 2](#entregáveis-fase-2)\r - [Passo a passo para build da aplicação localmente](#passo-a-passo-para-build-da-aplicação-localmente)\r - [Passo a passo para build da aplicação em container Docker](#passo-a-passo-para-build-da-aplicação-em-container-docker)\r - [Passo a passo para build da aplicação no cluster Kubernetes](#passo-a-passo-para-build-da-aplicação-no-cluster-kubernetes)\r   - [Desenho da Arquitetura do Cluster Kubernetes](#desenho-da-arquitetura-do-cluster-kubernetes)",
   "main": "index.js",
   "scripts": {
-    "start": "node src/infrastructure/http/index.js",
+    "start": "node src/adapter/driver/index.js",
     "test": "jest",
     "test:watch": "jest --watchAll",
     "test:coverage": "jest --coverage"

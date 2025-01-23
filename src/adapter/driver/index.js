@@ -1,22 +1,38 @@
-const PedidoService = require('../../core/application/services/PedidoService');
-const MongoPedidoRepository = require('../driven/MongoPedidoRepository');
-const PedidoController = require('./PedidoController');
-const database = require('../driven/database');
-const swaggerDocument = require('../../swagger/swagger.json');
-const swaggerUi = require('swagger-ui-express');
 const express = require('express');
+const { connectToMongo } = require('../driven/database');
+const MongoPedidoRepository = require('../driven/MongoPedidoRepository');
+const PedidoService = require('../../core/application/services/PedidoService');
+const PedidoController = require('./PedidoController');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('../../swagger/swagger.json');
+const { port } = require('../../shared/env');
 
 const app = express();
 app.use(express.json());
 
-const pedidoRepository = new MongoPedidoRepository(database);
-const pedidoService = new PedidoService(pedidoRepository);
+(async () => {
+  try {
+    const db = await connectToMongo();
 
-// integração do Swagger
-app.use('/api/v1/swagger-ui', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+    const pedidoRepository = new MongoPedidoRepository(db);
+    const pedidoService = new PedidoService(pedidoRepository);
+    const pedidoController = new PedidoController(pedidoService);
 
-// rotas da API
-app.use('/api/v1/pedidos', PedidoController(pedidoService));
+    // rota do swagger
+    app.use('/api/v1/swagger-ui', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+    // rotas da API
+    app.post('/api/v1/pedidos', (req, res, next) => pedidoController.criarPedido(req, res, next));
+    app.get('/api/v1/pedidos', (req, res, next) => pedidoController.listarPedidos(req, res, next));
+    app.get('/api/v1/pedidos/:id', (req, res, next) => pedidoController.buscarPedidoPorId(req, res, next));
+    app.post('/api/v1/pedidos/integrar', (req, res, next) => pedidoController.integrarComOutraAPI(req, res, next));
+
+    app.listen(port, () => console.log(`Servidor rodando na porta ${port}`));
+  } catch (err) {
+    console.error(`Erro ao iniciar o servidor: ${err}`);
+    process.exit(1);
+  }
+})();
 
 // Middleware para lidar com erros
 app.use((err, req, res, next) => {
