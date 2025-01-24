@@ -1,14 +1,14 @@
-apiVersion: v1
-kind: Service
-metadata:
-  name: eks-order-service
-  labels:
-    app: eks-order-app
-spec:
-  type: LoadBalancer
-  selector:
-    app: eks-order-app
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 3000
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: eks-order-service
+#   labels:
+#     app: eks-order-app
+# spec:
+#   type: LoadBalancer
+#   selector:
+#     app: eks-order-app
+#   ports:
+#     - protocol: TCP
+#       port: 80
+#       targetPort: 3000
