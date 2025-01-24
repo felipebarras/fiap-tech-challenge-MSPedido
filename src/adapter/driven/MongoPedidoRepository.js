@@ -9,7 +9,6 @@ class MongoPedidoRepository extends PedidoRepositoryPort {
 
   async criarPedido(pedido) {
     try {
-      console.log(`Banco de dados: ${this.database}`);
       return await this.database.collection('pedidos').insertOne(pedido);
     } catch (err) {
       throw new Error(`Erro ao criar pedido: ${err}`);
@@ -18,7 +17,6 @@ class MongoPedidoRepository extends PedidoRepositoryPort {
 
   async listarPedidos() {
     try {
-      console.log(`Banco de dados: ${this.database}`);
       const pedidos = await this.database.collection('pedidos').find().toArray();
 
       return pedidos;
@@ -29,18 +27,9 @@ class MongoPedidoRepository extends PedidoRepositoryPort {
 
   async buscarPedidoPorId(id) {
     try {
-      return await this.database.collection('pedidos').findOne({ id });
+      return await this.database.collection('pedidos').findOne({ _id: id });
     } catch (err) {
       throw new Error(`Erro ao buscar pedido por ID: ${err}`);
-    }
-  }
-
-  async integrarComOutraAPI(apiURL) {
-    try {
-      console.log(`Integrando com a API externa: ${apiURL}`);
-      return `Integração mockada com sucesso para os dados: ${JSON.stringify(apiURL)}`;
-    } catch (err) {
-      throw new Error(`Erro ao integrar com outra API: ${err}`);
     }
   }
 }

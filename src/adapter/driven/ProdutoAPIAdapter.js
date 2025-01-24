@@ -4,7 +4,7 @@ const { productURI } = require('../../shared/env');
 class ProdutoAPIAdapter {
   async consultarPorId(id) {
     try {
-      const response = await axios.get(`${productURI}/:id`, { urlParams: { id } });
+      const response = await axios.get(`${productURI}/${id}`);
 
       return response.data;
     } catch (err) {
@@ -15,7 +15,7 @@ class ProdutoAPIAdapter {
 
   async consultarPorCategoria(categoria) {
     try {
-      const response = await axios.get(`${productURI}/categoria/:categoria`, { urlParams: { categoria } });
+      const response = await axios.get(`${productURI}/categoria/${categoria}`);
 
       return response.data;
     } catch (err) {

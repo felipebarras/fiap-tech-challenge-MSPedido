@@ -8,8 +8,10 @@ class PedidoService {
   async criarPedido(pedido) {
     try {
       // validando o cliente
+      console.log(`Criando pedido para o cliente: ${pedido.clienteCPF}`);
       const cliente = await this.customerAPI.buscarClientePorCPF(pedido.clienteCPF);
       if (!cliente) throw new Error('Cliente não encontrado');
+      console.log(`Cliente encontrado: ${JSON.stringify(cliente)}`);
 
       // validando produtos
       for (const item of pedido.itens) {
@@ -45,15 +47,6 @@ class PedidoService {
     } catch (err) {
       console.error(`Erro ao buscar pedido por ID: ${err}`);
       throw new Error(`Erro ao buscar pedido por ID`);
-    }
-  }
-
-  async integrarComOutraAPI(data) {
-    try {
-      return await this.mongoDbRepository.integrarComOutraAPI(data);
-    } catch (err) {
-      console.error(`Erro ao comunicar com outra API: ${err}`);
-      throw new Error(`Erro ao comunicar com outra API`);
     }
   }
 }
