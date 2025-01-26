@@ -15,7 +15,7 @@ class PedidoRepositoryPort {
     throw new Error('Método não implementado');
   }
 
-  async limparPedidos() {
+  async limparBancoDeDados() {
     throw new Error('Método não implementado');
   }
 }

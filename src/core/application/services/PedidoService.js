@@ -57,19 +57,20 @@ class PedidoService {
 
       return pedido;
     } catch (err) {
-      next(err);
+      console.error(`Erro ao deletar pedido por ID: ${err}`);
+      throw new Error(`Erro ao deletar pedido por ID`);
     }
   }
 
-  async limparPedidos() {
+  async limparBancoDeDados() {
     try {
-      const result = await this.mongoDbRepository.limparPedidos();
-      if (!result) throw new Error('Erro ao limpar pedidos');
+      const result = await this.mongoDbRepository.limparBancoDeDados();
       console.log(`${result.deletedCount} registros excluídos`);
 
       return result;
     } catch (err) {
-      next(err);
+      console.error(`Erro ao limpar pedidos: ${err}`);
+      throw new Error(`Erro ao limpar pedidos`);
     }
   }
 }

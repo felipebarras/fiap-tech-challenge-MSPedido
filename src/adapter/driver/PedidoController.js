@@ -10,6 +10,9 @@ class PedidoController {
 
       res.status(201).json(pedidoCriado);
     } catch (err) {
+      console.error(`Erro ao criar pedido: ${err.message}`);
+      res.status(500).json({ error: 'Erro ao criar pedido' });
+
       next(err);
     }
   }
@@ -20,10 +23,12 @@ class PedidoController {
 
       res.status(200).json(pedidos);
     } catch (err) {
+      console.error(`Erro ao listar pedidos: ${err.message}`);
+      res.status(500).json({ error: 'Erro ao listar pedidos' });
+
       next(err);
     }
   }
-  '';
 
   async buscarPedidoPorId(req, res, next) {
     try {
@@ -34,6 +39,9 @@ class PedidoController {
 
       res.status(200).json(pedido);
     } catch (err) {
+      console.error(`Erro ao buscar pedido por ID: ${err.message}`);
+      res.status(500).json({ error: 'Erro ao buscar pedido por ID' });
+
       next(err);
     }
   }
@@ -45,16 +53,22 @@ class PedidoController {
 
       res.status(200).json({ message: `Pedido com ID ${id} foi removido com sucesso`, ...result });
     } catch (err) {
+      console.error(`Erro ao deletar pedido por ID: ${err.message}`);
+      res.status(500).json({ error: 'Erro ao deletar pedido por ID' });
+
       next(err);
     }
   }
 
-  async limparPedidos(req, res, next) {
+  async limparBancoDeDados(req, res, next) {
     try {
-      const result = await this.pedidoService.limparPedidos();
+      const result = await this.pedidoService.limparBancoDeDados();
 
       res.status(200).json({ message: 'Todos os pedidos foram removidos com sucesso', ...result });
     } catch (err) {
+      console.error(`Erro ao limpar pedidos: ${err.message}`);
+      res.status(500).json({ error: 'Erro ao deletar todos os pedidos' });
+
       next(err);
     }
   }
