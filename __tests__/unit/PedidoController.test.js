@@ -13,7 +13,8 @@ describe('Testes de PedidoController', () => {
       listarPedidos: jest.fn(),
       buscarPedidoPorId: jest.fn(),
       criarPedido: jest.fn(),
-      integrarComOutraAPI: jest.fn()
+      deletarPedidoPorId: jest.fn(),
+      limparBancoDeDados: jest.fn()
     };
 
     app.use('/pedidos', PedidoController(mockPedidoService));
@@ -84,29 +85,43 @@ describe('Testes de PedidoController', () => {
     expect(response.body).toEqual({ message: 'Erro ao buscar pedido' });
   });
 
-  it('Deve integrar com uma API baseando em sua URL', async () => {
-    const apiResponse = { message: 'Integração realizada com sucesso' };
-    const apiURL = 'http://fake-api.com';
+  it('Deve deletar um pedido por seu ID', async () => {
+    const pedido = { id: '1', cliente: 'Felipe', itens: [{ produto: 'Hamburguer', quantidade: 2 }], status: 'Aguardando Pagamento' };
 
-    mockPedidoService.integrarComOutraAPI.mockResolvedValue(apiResponse);
+    mockPedidoService.deletarPedidoPorId.mockResolvedValue(pedido);
 
-    const response = await request(app).get(`pedidos/integrar/${apiURL}`);
+    const response = await request(app).delete('/pedidos/1');
 
     expect(response.status).toBe(200);
-    expect(response.body).toEqual(apiResponse);
-    expect(mockPedidoService.integrarComOutraAPI).toHaveBeenCalledWith(apiURL);
+    expect(response.body).toEqual(pedido);
+    expect(mockPedidoService.deletarPedido).toHaveBeenCalledWith('1');
   });
 
-  it('Deve retornar 500 ao integrar com APIs com erro', async () => {
-    const apiResponse = { message: 'Erro ao comunicar com outra API' };
-    const apiURL = 'http://fake-api.com';
+  it('Deve retornar 500 ao deletar pedido com erro', async () => {
+    mockPedidoService.deletarPedidoPorId.mockRejectedValue(new Error('Erro ao deletar pedido'));
 
-    mockPedidoService.integrarComOutraAPI.mockRejectedValue(new Error('Erro ao comunicar com outra API'));
-
-    const response = await request(app).get(`pedidos/integrar/${apiURL}`);
+    const response = await request(app).delete('/pedidos/1');
 
     expect(response.status).toBe(500);
-    expect(response.body).toEqual(apiResponse);
-    expect(mockPedidoService.integrarComOutraAPI).toHaveBeenCalledWith(apiURL);
+    expect(response.body).toEqual({ message: 'Erro ao deletar pedido' });
+  });
+
+  it('Deve deletar todos os pedidos do banco de dados', async () => {
+    mockPedidoService.limparBancoDeDados.mockResolvedValue();
+
+    const response = await request(app).delete('/pedidos');
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({ message: 'Todos os pedidos foram removidos com sucesso' });
+    expect(mockPedidoService.limparBancoDeDados).toHaveBeenCalled();
+  });
+
+  it('Deve retornar 500 ao deletar todos os pedidos com erro', async () => {
+    mockPedidoService.limparBancoDeDados.mockRejectedValue(new Error('Erro ao deletar todos os pedidos'));
+
+    const response = await request(app).delete('/pedidos');
+
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({ message: 'Erro ao deletar todos os pedidos' });
   });
 });

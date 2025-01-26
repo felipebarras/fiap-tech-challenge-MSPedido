@@ -35,7 +35,7 @@ app.use(express.json());
     app.get('/api/v1/pedidos', (req, res, next) => pedidoController.listarPedidos(req, res, next));
     app.get('/api/v1/pedidos/:id', (req, res, next) => pedidoController.buscarPedidoPorId(req, res, next));
 
-    app.delete('/api/v1/pedidos/', (req, res, next) => pedidoController.limparPedidos(req, res, next));
+    app.delete('/api/v1/pedidos/', (req, res, next) => pedidoController.limparBancoDeDados(req, res, next));
     app.delete('/api/v1/pedidos/:id', (req, res, next) => pedidoController.deletarPedidoPorId(req, res, next));
 
     app.listen(port, () => console.log(`Servidor rodando na porta ${port}`));

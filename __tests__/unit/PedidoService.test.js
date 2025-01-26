@@ -8,7 +8,8 @@ describe('Testes de PedidoService', () => {
       listarPedidos: jest.fn(),
       criarPedido: jest.fn(),
       buscarPedidoPorId: jest.fn(),
-      integrarComOutraAPI: jest.fn()
+      deletarPedidoPorId: jest.fn(),
+      limparBancoDeDados: jest.fn()
     };
 
     pedidoService = new PedidoService(mockPedidoRepository);
@@ -73,23 +74,35 @@ describe('Testes de PedidoService', () => {
     await expect(pedidoService.buscarPedidoPorId('1')).rejects.toThrow('Erro ao buscar pedido');
   });
 
-  it('Deve integrar com uma API baseando em sua URL', async () => {
-    const apiResponse = { message: 'Integração realizada com sucesso' };
-    const apiURL = 'http://fake-api.com';
+  it('Deve deletar um pedido por seu ID', async () => {
+    const pedido = { id: '1', cliente: 'Felipe', itens: [{ produto: 'Hamburguer', quantidade: 2 }], status: 'Aguardando Pagamento' };
 
-    mockPedidoRepository.integrarComOutraAPI.mockResolvedValue(apiResponse);
+    mockPedidoRepository.deletarPedidoPorId.mockResolvedValue(pedido);
 
-    const result = await pedidoService.integrarComOutraAPI(apiURL);
+    const result = await pedidoService.deletarPedidoPorId('1');
 
-    expect(result).toEqual(apiResponse);
-    expect(mockPedidoRepository.integrarComOutraAPI).toHaveBeenCalledWith(apiURL);
+    expect(result).toEqual(pedido);
+    expect(mockPedidoRepository.deletarPedidoPorId).toHaveBeenCalledWith('1');
   });
 
-  it('Deve lançar erro ao integrar com outra API', async () => {
-    const apiURL = 'http://fake-api.com';
+  it('Deve retornar um erro se não encontrar o pedido com o ID ao deletar', async () => {
+    mockPedidoRepository.deletarPedidoPorId.mockResolvedValue(null);
 
-    mockPedidoRepository.integrarComOutraAPI.mockRejectedValue(new Error('Erro ao comunicar com outra API'));
+    await expect(pedidoService.deletarPedidoPorId('1')).rejects.toThrow('Pedido não encontrado');
+  });
 
-    await expect(pedidoService.integrarComOutraAPI(apiURL)).rejects.toThrow('Erro ao comunicar com outra API');
+  it('Deve deletar todos os pedidos do banco de dados', async () => {
+    mockPedidoRepository.limparBancoDeDados.mockResolvedValue(true);
+
+    const result = await pedidoService.limparBancoDeDados();
+
+    expect(result).toBe(true);
+    expect(mockPedidoRepository.limparBancoDeDados).toHaveBeenCalled();
+  });
+
+  it('Deve retornar um erro ao limpar a base de dados com erro', async () => {
+    mockPedidoRepository.limparBancoDeDados.mockRejectedValue(new Error('Erro ao limpar banco de dados'));
+
+    await expect(pedidoService.limparBancoDeDados()).rejects.toThrow('Erro ao limpar banco de dados');
   });
 });
