@@ -72,6 +72,26 @@
           },
           "500": { "description": "Erro ao listar pedidos" }
         }
+      },
+      "delete": {
+        "summary": "Remove todos os pedidos",
+        "description": "Remove todos os pedidos da base de dados.",
+        "tags": ["Pedidos"],
+        "responses": {
+          "200": {
+            "description": "Pedidos removidos com sucesso",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Todos os pedidos foram removidos",
+                  "acknowledged": true,
+                  "deletedCount": 10
+                }
+              }
+            }
+          },
+          "500": { "description": "Erro ao limpar pedidos" }
+        }
       }
     },
     "/pedidos/{id}": {
@@ -99,6 +119,36 @@
           },
           "404": { "description": "Pedido não encontrado" },
           "500": { "description": "Erro ao buscar pedido" }
+        }
+      },
+      "delete": {
+        "summary": "Remove um pedido pelo ID",
+        "description": "Remove um pedido específico com base no ID fornecido.",
+        "tags": ["Pedidos"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID do pedido a ser removido"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pedido removido com sucesso",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Pedido com ID 63f9c5194f1e88c0f1e4a9b9 foi removido",
+                  "acknowledged": true,
+                  "deletedCount": 1
+                }
+              }
+            }
+          },
+          "404": { "description": "Pedido não encontrado" },
+          "500": { "description": "Erro ao remover pedido" }
         }
       }
     }

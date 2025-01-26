@@ -11,7 +11,11 @@ class PedidoRepositoryPort {
     throw new Error('Método não implementado');
   }
 
-  async integrarComOutraAPI(apiURL) {
+  async deletarPedidoPorId(id) {
+    throw new Error('Método não implementado');
+  }
+
+  async limparPedidos() {
     throw new Error('Método não implementado');
   }
 }

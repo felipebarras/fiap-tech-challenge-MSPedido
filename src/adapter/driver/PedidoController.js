@@ -38,11 +38,22 @@ class PedidoController {
     }
   }
 
-  async integrarComOutraAPI(req, res, next) {
+  async deletarPedidoPorId(req, res, next) {
     try {
-      const resultado = await this.pedidoService.integrarComOutraAPI(req.body);
+      const { id } = req.params.id;
+      const result = await this.pedidoService.deletarPedidoPorId(id);
 
-      res.status(200).json({ message: 'Integração realizada com sucesso', resultado });
+      res.status(200).json({ message: `Pedido com ID ${id} foi removido com sucesso`, ...result });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  async limparPedidos(req, res, next) {
+    try {
+      const result = await this.pedidoService.limparPedidos();
+
+      res.status(200).json({ message: 'Todos os pedidos foram removidos com sucesso', ...result });
     } catch (err) {
       next(err);
     }

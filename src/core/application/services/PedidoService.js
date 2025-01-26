@@ -49,6 +49,29 @@ class PedidoService {
       throw new Error(`Erro ao buscar pedido por ID`);
     }
   }
+
+  async deletarPedidoPorId(id) {
+    try {
+      const pedido = await this.mongoDbRepository.deletarPedidoPorId(id);
+      if (!pedido) throw new Error('Pedido não encontrado');
+
+      return pedido;
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  async limparPedidos() {
+    try {
+      const result = await this.mongoDbRepository.limparPedidos();
+      if (!result) throw new Error('Erro ao limpar pedidos');
+      console.log(`${result.deletedCount} registros excluídos`);
+
+      return result;
+    } catch (err) {
+      next(err);
+    }
+  }
 }
 
 module.exports = PedidoService;
