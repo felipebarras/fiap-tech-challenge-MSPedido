@@ -7,6 +7,18 @@ class PedidoService {
 
   async criarPedido(pedido) {
     try {
+      // validando o cliente
+      console.log(`Criando pedido para o cliente: ${pedido.clienteCPF}`);
+      const cliente = await this.customerAPI.buscarClientePorCPF(pedido.clienteCPF);
+      if (!cliente) throw new Error('Cliente não encontrado');
+      console.log(`Cliente encontrado: ${JSON.stringify(cliente)}`);
+
+      // validando produtos
+      for (const item of pedido.itens) {
+        const produto = await this.produtoAPI.consultarPorId(item.produtoId);
+        if (!produto) throw new Error('Produto não encontrado');
+      }
+
       return await this.mongoDbRepository.criarPedido(pedido);
     } catch (err) {
       console.error(`Erro ao criar pedido: ${err}`);
@@ -16,7 +28,10 @@ class PedidoService {
 
   async listarPedidos() {
     try {
-      return await this.mongoDbRepository.listarPedidos();
+      const pedidos = await this.mongoDbRepository.listarPedidos();
+      !pedidos ? console.log('Nenhum pedido encontrado') : console.log(`Pedidos encontrados: ${JSON.stringify(pedidos)}`);
+
+      return pedidos;
     } catch (err) {
       console.error(`Erro ao listar pedidos: ${err}`);
       throw new Error(`Erro ao listar pedidos`);
@@ -35,12 +50,26 @@ class PedidoService {
     }
   }
 
-  async integrarComOutraAPI(data) {
+  async deletarPedidoPorId(id) {
     try {
-      return await this.mongoDbRepository.integrarComOutraAPI(data);
+      const pedido = await this.mongoDbRepository.deletarPedidoPorId(id);
+      if (!pedido) throw new Error('Pedido não encontrado');
+
+      return pedido;
     } catch (err) {
-      console.error(`Erro ao comunicar com outra API: ${err}`);
-      throw new Error(`Erro ao comunicar com outra API`);
+      next(err);
+    }
+  }
+
+  async limparPedidos() {
+    try {
+      const result = await this.mongoDbRepository.limparPedidos();
+      if (!result) throw new Error('Erro ao limpar pedidos');
+      console.log(`${result.deletedCount} registros excluídos`);
+
+      return result;
+    } catch (err) {
+      next(err);
     }
   }
 }

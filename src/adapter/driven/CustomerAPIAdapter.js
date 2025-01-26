@@ -4,11 +4,15 @@ const { customerURI } = require('../../shared/env');
 class CustomerAPIAdapter {
   async buscarClientePorCPF(cpf) {
     try {
-      const response = await axios.get(`${customerURI}/:cpf`, { urlParams: { cpf } });
+      console.log(`URL gerada: ${customerURI}/`);
+      console.log(`Iniciando busca por CPF: ${cpf}`);
+      const response = await axios.get(`${customerURI}/${cpf}`);
 
+      console.log(`Cliente encontrado: ${JSON.stringify(response.data)}`);
       return response.data;
     } catch (err) {
-      console.error(`Erro ao buscar cliente por CPF: ${err}`);
+      console.error(`Erro ao buscar cliente por CPF: ${err.message}`);
+      console.error(`Stack: ${err.stack}`);
       throw new Error(`Erro ao buscar cliente por CPF`);
     }
   }

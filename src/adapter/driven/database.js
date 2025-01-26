@@ -7,29 +7,16 @@ async function connectToMongo() {
   if (db) return db;
 
   try {
-    const client = new MongoClient(mongoURI);
-    await client.connect();
-    console.log('Conectado no MongoDB com sucesso.');
+    const client = await MongoClient.connect(mongoURI);
     db = client.db();
+    console.log(`Conexão com o MongoDB estabelecida! Banco: ${db.databaseName}`);
 
     return db;
   } catch (err) {
-    console.log(`Erro ao se conectar no MongoDB: ${err}`);
+    console.error(`Erro ao conectar ao MongoDB: ${err}`);
+    // process.exit(1);
     throw err;
   }
 }
 
-module.exports = connectToMongo;
-
-// if (require.main === module) {
-//   (async () => {
-//     try {
-//       const dbTest = await connectToMongo();
-//       console.log('Teste de conexão ao MongoDB concluído');
-//       process.exit(0);
-//     } catch (err) {
-//       console.error(`Erro no teste de conexão: ${err}`);
-//       process.exit(1);
-//     }
-//   })();
-// }
+module.exports = { connectToMongo };

@@ -1,0 +1,74 @@
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: eks-order-deployment
+#   labels:
+#     app: eks-order-app
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: eks-order-app
+#   template:
+#     metadata:
+#       labels:
+#         app: eks-order-app
+#     spec:
+#       affinity:
+#         nodeAffinity:
+#           requiredDuringSchedulingIgnoredDuringExecution:
+#             nodeSelectorTerms:
+#               - matchExpressions:
+#                   - key: kubernetes.io/arch
+#                     operator: In
+#                     values:
+#                       - amd64
+#                       - arm64
+#       containers:
+#         - name: eks-order-app
+#           image: 666881761373.dkr.ecr.us-east-1.amazonaws.com/order:latest
+#           ports:
+#             - name: http
+#               containerPort: 3000
+#           env:
+#             - name: DATASOURCE_DRIVER_CLASS_NAME
+#               value: org.postgresql.Driver
+#             - name: JPA_DIALECT
+#               value: org.hibernate.dialect.PostgreSQLDialect
+#             - name: DATASOURCE_URL
+#               valueFrom:
+#                 configMapKeyRef:
+#                   name: eks-order-configmaps
+#                   key: datasource_url
+#             - name: DATASOURCE_USERNAME
+#               valueFrom:
+#                 secretKeyRef:
+#                   name: eks-order-secrets
+#                   key: datasource_username
+#             - name: DATASOURCE_PASSWORD
+#               valueFrom:
+#                 secretKeyRef:
+#                   name: eks-order-secrets
+#                   key: datasource_password
+#           readinessProbe:
+#             httpGet:
+#               path: /api/v1/actuator/health
+#               port: 8080
+#             initialDelaySeconds: 40
+#             periodSeconds: 10
+#           livenessProbe:
+#             httpGet:
+#               path: /api/v1/actuator/health
+#               port: 8080
+#             initialDelaySeconds: 40
+#             periodSeconds: 10
+#           resources:
+#             requests:
+#               cpu: 500m
+#               memory: 1024Mi
+#             limits:
+#               cpu: 2000m
+#               memory: 2048Mi
+#           imagePullPolicy: IfNotPresent
+#       nodeSelector:
+#         kubernetes.io/os: linux

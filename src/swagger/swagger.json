@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3000",
+      "url": "http://localhost:3000/api/v1",
       "description": "Servidor local"
     }
   ],
@@ -15,13 +15,21 @@
     "/pedidos": {
       "post": {
         "summary": "Cria um novo pedido",
-        "description": "Cria um novo pedido com os dados fornecidos.",
+        "description": "Cria um pedido validando o cliente pelo CPF e os itens (produtos) por ID.",
         "tags": ["Pedidos"],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/Pedido" }
+              "schema": { "$ref": "#/components/schemas/PedidoRequest" },
+              "example": {
+                "clienteCPF": "12345678900",
+                "itens": [
+                  { "produtoId": "1", "quantidade": 2 },
+                  { "produtoId": "2", "quantidade": 1 }
+                ],
+                "status": "pendente"
+              }
             }
           }
         },
@@ -32,13 +40,17 @@
               "application/json": {
                 "example": {
                   "id": "1",
-                  "cliente": "João",
-                  "itens": [{ "produto": "Pizza", "quantidade": 2 }],
+                  "clienteCPF": "12345678900",
+                  "itens": [
+                    { "produtoId": "1", "quantidade": 2 },
+                    { "produtoId": "2", "quantidade": 1 }
+                  ],
                   "status": "pendente"
                 }
               }
             }
           },
+          "400": { "description": "Cliente ou produto inválido" },
           "500": { "description": "Erro ao criar pedido" }
         }
       },
@@ -53,12 +65,32 @@
               "application/json": {
                 "schema": {
                   "type": "array",
-                  "items": { "$ref": "#/components/schemas/Pedido" }
+                  "items": { "$ref": "#/components/schemas/PedidoResponse" }
                 }
               }
             }
           },
           "500": { "description": "Erro ao listar pedidos" }
+        }
+      },
+      "delete": {
+        "summary": "Remove todos os pedidos",
+        "description": "Remove todos os pedidos da base de dados.",
+        "tags": ["Pedidos"],
+        "responses": {
+          "200": {
+            "description": "Pedidos removidos com sucesso",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Todos os pedidos foram removidos",
+                  "acknowledged": true,
+                  "deletedCount": 10
+                }
+              }
+            }
+          },
+          "500": { "description": "Erro ao limpar pedidos" }
         }
       }
     },
@@ -81,32 +113,55 @@
             "description": "Detalhes do pedido retornados com sucesso",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/Pedido" }
+                "schema": { "$ref": "#/components/schemas/PedidoResponse" }
               }
             }
           },
           "404": { "description": "Pedido não encontrado" },
           "500": { "description": "Erro ao buscar pedido" }
         }
+      },
+      "delete": {
+        "summary": "Remove um pedido pelo ID",
+        "description": "Remove um pedido específico com base no ID fornecido.",
+        "tags": ["Pedidos"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID do pedido a ser removido"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pedido removido com sucesso",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Pedido com ID 63f9c5194f1e88c0f1e4a9b9 foi removido",
+                  "acknowledged": true,
+                  "deletedCount": 1
+                }
+              }
+            }
+          },
+          "404": { "description": "Pedido não encontrado" },
+          "500": { "description": "Erro ao remover pedido" }
+        }
       }
     }
   },
   "components": {
     "schemas": {
-      "Pedido": {
+      "PedidoRequest": {
         "type": "object",
         "properties": {
-          "id": { "type": "string", "example": "1" },
-          "cliente": { "type": "string", "example": "João" },
+          "clienteCPF": { "type": "string", "example": "12345678900" },
           "itens": {
             "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "produto": { "type": "string", "example": "Pizza" },
-                "quantidade": { "type": "integer", "example": 2 }
-              }
-            }
+            "items": { "$ref": "#/components/schemas/Item" }
           },
           "status": {
             "type": "string",
@@ -114,7 +169,31 @@
             "example": "pendente"
           }
         },
-        "required": ["cliente", "itens", "status"]
+        "required": ["clienteCPF", "itens", "status"]
+      },
+      "PedidoResponse": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "example": "1" },
+          "clienteCPF": { "type": "string", "example": "12345678900" },
+          "itens": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Item" }
+          },
+          "status": {
+            "type": "string",
+            "enum": ["pendente", "em_preparacao", "pronto", "entregue"],
+            "example": "pendente"
+          }
+        }
+      },
+      "Item": {
+        "type": "object",
+        "properties": {
+          "produtoId": { "type": "string", "example": "1" },
+          "quantidade": { "type": "integer", "example": 2 }
+        },
+        "required": ["produtoId", "quantidade"]
       }
     }
   }
