@@ -1,5 +1,3 @@
-import * as res from 'express/lib/response';
-import * as next from 'next';
 class PedidoController {
   constructor(pedidoService) {
     this.pedidoService = pedidoService;
