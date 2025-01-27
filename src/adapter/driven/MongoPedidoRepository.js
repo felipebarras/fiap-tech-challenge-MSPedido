@@ -57,6 +57,17 @@ class MongoPedidoRepository extends PedidoRepositoryPort {
       throw new Error(`Erro ao limpar banco: ${err}`);
     }
   }
+
+  async atualizarPedido(id, dadosAtualizados) {
+    try {
+      const result = await this.database.collection('pedidos').updateOne({ _id: new ObjectId(id) }, { $set: dadosAtualizados });
+      if (result.matchedCount === 0) throw new Error('Pedido não encontrado');
+
+      return result;
+    } catch (err) {
+      throw new Error(`Erro ao atualizar pedido: ${err}`);
+    }
+  }
 }
 
 module.exports = MongoPedidoRepository;

@@ -1,3 +1,5 @@
+import * as res from 'express/lib/response';
+import * as next from 'next';
 class PedidoController {
   constructor(pedidoService) {
     this.pedidoService = pedidoService;
@@ -10,9 +12,6 @@ class PedidoController {
 
       res.status(201).json(pedidoCriado);
     } catch (err) {
-      console.error(`Erro ao criar pedido: ${err.message}`);
-      res.status(500).json({ error: 'Erro ao criar pedido' });
-
       next(err);
     }
   }
@@ -23,9 +22,6 @@ class PedidoController {
 
       res.status(200).json(pedidos);
     } catch (err) {
-      console.error(`Erro ao listar pedidos: ${err.message}`);
-      res.status(500).json({ error: 'Erro ao listar pedidos' });
-
       next(err);
     }
   }
@@ -39,9 +35,6 @@ class PedidoController {
 
       res.status(200).json(pedido);
     } catch (err) {
-      console.error(`Erro ao buscar pedido por ID: ${err.message}`);
-      res.status(500).json({ error: 'Erro ao buscar pedido por ID' });
-
       next(err);
     }
   }
@@ -53,9 +46,6 @@ class PedidoController {
 
       res.status(200).json({ message: `Pedido com ID ${id} foi removido com sucesso`, ...result });
     } catch (err) {
-      console.error(`Erro ao deletar pedido por ID: ${err.message}`);
-      res.status(500).json({ error: 'Erro ao deletar pedido por ID' });
-
       next(err);
     }
   }
@@ -66,9 +56,22 @@ class PedidoController {
 
       res.status(200).json({ message: 'Todos os pedidos foram removidos com sucesso', ...result });
     } catch (err) {
-      console.error(`Erro ao limpar pedidos: ${err.message}`);
-      res.status(500).json({ error: 'Erro ao deletar todos os pedidos' });
+      next(err);
+    }
+  }
 
+  async atualizarStatusPedido(req, res, next) {
+    try {
+      const { id } = req.params;
+      const { status } = req.body;
+
+      if (!['Aguardando Pagamento', 'Pendente', 'Preparando', 'Pronto', 'Entregue'].includes(status))
+        return res.status(400).json({ message: 'Status Inválido' });
+
+      const result = await this.pedidoService.atualizarStatusPedido(id, novoStatus);
+
+      res.status(200).json({ message: 'Status do pedido atualizado', result });
+    } catch (err) {
       next(err);
     }
   }

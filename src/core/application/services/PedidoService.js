@@ -73,6 +73,20 @@ class PedidoService {
       throw new Error(`Erro ao limpar pedidos`);
     }
   }
+
+  async atualizarStatusPedido(id, novoStatus) {
+    try {
+      const pedido = await this.mongoDbRepository.buscarPedidoPorId(id);
+      if (!pedido) throw new Error('Pedido não encontrado');
+
+      const atualizado = await this.mongoDbRepository.atualizarPedido(id, { status: novoStatus });
+
+      return atualizado;
+    } catch (err) {
+      console.error(`Erro ao atualizar status do pedido: ${err}`);
+      throw new Error(`Erro ao atualizar status do pedido`);
+    }
+  }
 }
 
 module.exports = PedidoService;

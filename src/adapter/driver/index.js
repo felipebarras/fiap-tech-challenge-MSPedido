@@ -38,6 +38,8 @@ app.use(express.json());
     app.delete('/api/v1/pedidos/', (req, res, next) => pedidoController.limparBancoDeDados(req, res, next));
     app.delete('/api/v1/pedidos/:id', (req, res, next) => pedidoController.deletarPedidoPorId(req, res, next));
 
+    app.patch('/api/v1/pedidos/:id/status', (req, res, next) => pedidoController.atualizarStatusPedido(req, res, next));
+
     app.listen(port, () => console.log(`Servidor rodando na porta ${port}`));
   } catch (err) {
     console.error(`Erro ao iniciar o servidor: ${err}`);
