@@ -26,8 +26,8 @@ class PedidoController {
 
   async buscarPedidoPorId(req, res, next) {
     try {
-      const pedidoId = req.params.id;
-      const pedido = await this.pedidoService.buscarPedidoPorId(pedidoId);
+      const { id } = req.params;
+      const pedido = await this.pedidoService.buscarPedidoPorId(id);
 
       if (!pedido) return res.status(404).json({ error: 'Pedido não encontrado' });
 
@@ -39,8 +39,10 @@ class PedidoController {
 
   async deletarPedidoPorId(req, res, next) {
     try {
-      const { id } = req.params.id;
+      const { id } = req.params;
       const result = await this.pedidoService.deletarPedidoPorId(id);
+
+      if (result.deletedCount === 0) return res.status(404).json({ error: 'Pedido não encontrado' });
 
       res.status(200).json({ message: `Pedido com ID ${id} foi removido com sucesso`, ...result });
     } catch (err) {
@@ -66,9 +68,11 @@ class PedidoController {
       if (!['Aguardando Pagamento', 'Pendente', 'Preparando', 'Pronto', 'Entregue'].includes(status))
         return res.status(400).json({ message: 'Status Inválido' });
 
-      const result = await this.pedidoService.atualizarStatusPedido(id, novoStatus);
+      const result = await this.pedidoService.atualizarStatusPedido(id, status);
 
-      res.status(200).json({ message: 'Status do pedido atualizado', result });
+      if (result.modifiedCount === 0) return res.status(404).json({ message: 'Pedido não encontrado' });
+
+      return res.status(200).json({ message: `Status do pedido com ID ${id} foi atualizado para ${status}` });
     } catch (err) {
       next(err);
     }

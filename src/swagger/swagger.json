@@ -28,7 +28,7 @@
                   { "produtoId": "1", "quantidade": 2 },
                   { "produtoId": "2", "quantidade": 1 }
                 ],
-                "status": "pendente"
+                "status": "Pendente"
               }
             }
           }
@@ -45,7 +45,7 @@
                     { "produtoId": "1", "quantidade": 2 },
                     { "produtoId": "2", "quantidade": 1 }
                   ],
-                  "status": "pendente"
+                  "status": "Pendente"
                 }
               }
             }
@@ -175,7 +175,7 @@
                 "properties": {
                   "status": {
                     "type": "string",
-                    "enum": ["pendente", "em_preparacao", "pronto", "entregue"]
+                    "enum": ["Aguardando Pagamento", "Pendente", "Preparando", "Pronto", "Entregue"]
                   }
                 },
                 "required": ["status"]
@@ -214,8 +214,8 @@
           },
           "status": {
             "type": "string",
-            "enum": ["pendente", "em_preparacao", "pronto", "entregue"],
-            "example": "pendente"
+            "enum": ["Aguardando Pagamento", "Pendente", "Preparando", "Pronto", "Entregue"],
+            "example": "Pendente"
           }
         },
         "required": ["clienteCPF", "itens", "status"]
@@ -231,8 +231,8 @@
           },
           "status": {
             "type": "string",
-            "enum": ["pendente", "em_preparacao", "pronto", "entregue"],
-            "example": "pendente"
+            "enum": ["Aguardando Pagamento", "Pendente", "Preparando", "Pronto", "Entregue"],
+            "example": "Pendente"
           }
         }
       },
