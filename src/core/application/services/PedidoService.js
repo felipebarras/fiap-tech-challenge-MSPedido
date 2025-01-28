@@ -23,8 +23,7 @@ class PedidoService {
 
       return await this.mongoDbRepository.criarPedido(pedido);
     } catch (err) {
-      console.error(`Erro ao criar pedido: ${err}`);
-      throw new Error(`Erro ao criar pedido`);
+      throw new Error(`Erro ao criar pedido: ${err}`);
     }
   }
 
@@ -35,8 +34,7 @@ class PedidoService {
 
       return pedidos;
     } catch (err) {
-      console.error(`Erro ao listar pedidos: ${err}`);
-      throw new Error(`Erro ao listar pedidos`);
+      throw new Error(`Erro ao listar pedidos: ${err}`);
     }
   }
 
@@ -47,7 +45,6 @@ class PedidoService {
 
       return pedido;
     } catch (err) {
-      console.error(`Erro ao buscar pedido por ID: ${err}`);
       throw new Error(`Erro ao buscar pedido por ID: ${err.message}`);
     }
   }
@@ -59,7 +56,6 @@ class PedidoService {
 
       return pedido;
     } catch (err) {
-      console.error(`Erro ao deletar pedido por ID: ${err}`);
       throw new Error(`Erro ao deletar pedido por ID: ${err.message}`);
     }
   }
@@ -71,8 +67,7 @@ class PedidoService {
 
       return result;
     } catch (err) {
-      console.error(`Erro ao limpar pedidos: ${err}`);
-      throw new Error(`Erro ao limpar pedidos`);
+      throw new Error(`Erro ao limpar pedidos: ${err.message}`);
     }
   }
 
@@ -85,8 +80,7 @@ class PedidoService {
 
       return atualizado;
     } catch (err) {
-      console.error(`Erro ao atualizar status do pedido: ${err}`);
-      throw new Error(`Erro ao atualizar status do pedido`);
+      throw new Error(`Erro ao atualizar status do pedido: ${err.message}`);
     }
   }
 }

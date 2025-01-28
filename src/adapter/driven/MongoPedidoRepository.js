@@ -13,6 +13,8 @@ class MongoPedidoRepository extends PedidoRepositoryPort {
       pedido.pedidoId = new ObjectId().toHexString();
       await this.database.collection('pedidos').insertOne(pedido);
 
+      console.log(`Pedido criado: ${JSON.stringify(pedido)}`);
+
       return { ...pedido };
     } catch (err) {
       throw new Error(`Erro ao criar pedido: ${err}`);
@@ -31,14 +33,12 @@ class MongoPedidoRepository extends PedidoRepositoryPort {
 
   async buscarPedidoPorId(pedidoId) {
     try {
-      // console.log(`ID recebido para busca: ${pedidoId}`);
-
       const pedido = await this.database.collection('pedidos').findOne({ pedidoId });
 
-      // console.log(`Pedido encontrado: ${JSON.stringify(pedido)}`);
+      console.log(`Pedido encontrado: ${JSON.stringify(pedido)}`);
+
       return pedido;
     } catch (err) {
-      console.error(`Erro ao buscar pedido por ID: ${err}`);
       throw new Error(`Erro ao buscar pedido por ID: ${err.message}`);
     }
   }
@@ -47,6 +47,8 @@ class MongoPedidoRepository extends PedidoRepositoryPort {
     try {
       const result = await this.database.collection('pedidos').deleteOne({ pedidoId });
       if (result.deletedCount === 0) throw new Error('Pedido não encontrado');
+
+      console.log(`Pedido ${pedidoId} deletado com sucesso`);
 
       return result;
     } catch (err) {
@@ -58,6 +60,8 @@ class MongoPedidoRepository extends PedidoRepositoryPort {
     try {
       const result = await this.database.collection('pedidos').deleteMany({});
 
+      console.log(`Banco de dados limpo com sucesso.`);
+
       return { aknowledged: result.aknowledged, deletedCount: result.deletedCount };
     } catch (err) {
       throw new Error(`Erro ao limpar banco: ${err}`);
@@ -68,6 +72,8 @@ class MongoPedidoRepository extends PedidoRepositoryPort {
     try {
       const result = await this.database.collection('pedidos').updateOne({ pedidoId }, { $set: { status: novoStatus } });
       if (result.matchedCount === 0) throw new Error('Pedido não encontrado');
+
+      console.log(`Pedido ${pedidoId} atualizado para: ${JSON.stringify(result)}`);
 
       return result;
     } catch (err) {
