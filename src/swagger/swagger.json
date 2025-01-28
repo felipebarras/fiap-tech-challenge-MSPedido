@@ -28,7 +28,7 @@
                   { "produtoId": "1", "quantidade": 2 },
                   { "produtoId": "2", "quantidade": 1 }
                 ],
-                "status": "Pendente"
+                "status": "Aguardando Pagamento"
               }
             }
           }
@@ -45,7 +45,7 @@
                     { "produtoId": "1", "quantidade": 2 },
                     { "produtoId": "2", "quantidade": 1 }
                   ],
-                  "status": "Pendente"
+                  "status": "Aguardando Pagamento"
                 }
               }
             }
@@ -215,7 +215,7 @@
           "status": {
             "type": "string",
             "enum": ["Aguardando Pagamento", "Pendente", "Preparando", "Pronto", "Entregue"],
-            "example": "Pendente"
+            "example": "Aguardando Pagamento"
           }
         },
         "required": ["clienteCPF", "itens", "status"]
@@ -232,7 +232,7 @@
           "status": {
             "type": "string",
             "enum": ["Aguardando Pagamento", "Pendente", "Preparando", "Pronto", "Entregue"],
-            "example": "Pendente"
+            "example": "Aguardando Pagamento"
           }
         }
       },

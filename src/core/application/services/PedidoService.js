@@ -10,16 +10,16 @@ class PedidoService {
   async criarPedido(pedido) {
     try {
       // validando o cliente
-      // console.log(`Criando pedido para o cliente: ${pedido.clienteCPF}`);
-      // const cliente = await this.customerAPI.buscarClientePorCPF(pedido.clienteCPF);
-      // if (!cliente) throw new Error('Cliente não encontrado');
-      // console.log(`Cliente encontrado: ${JSON.stringify(cliente)}`);
+      console.log(`Criando pedido para o cliente: ${pedido.clienteCPF}`);
+      const cliente = await this.customerAPI.buscarClientePorCPF(pedido.clienteCPF);
+      if (!cliente) throw new Error('Cliente não encontrado');
+      console.log(`Cliente encontrado: ${JSON.stringify(cliente)}`);
 
-      // // validando produtos
-      // for (const item of pedido.itens) {
-      //   const produto = await this.produtoAPI.consultarPorId(item.produtoId);
-      //   if (!produto) throw new Error('Produto não encontrado');
-      // }
+      // validando produtos
+      for (const item of pedido.itens) {
+        const produto = await this.produtoAPI.consultarPorId(item.produtoId);
+        if (!produto) throw new Error('Produto não encontrado');
+      }
 
       return await this.mongoDbRepository.criarPedido(pedido);
     } catch (err) {

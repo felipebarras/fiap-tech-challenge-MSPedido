@@ -10,7 +10,7 @@ class PedidoController {
 
       res.status(201).json(pedidoCriado);
     } catch (err) {
-      next(err);
+      res.status(500).json({ error: err.message });
     }
   }
 
@@ -20,7 +20,7 @@ class PedidoController {
 
       res.status(200).json(pedidos);
     } catch (err) {
-      next(err);
+      res.status(500).json({ error: err.message });
     }
   }
 
@@ -33,7 +33,7 @@ class PedidoController {
 
       res.status(200).json(pedido);
     } catch (err) {
-      next(err);
+      res.status(500).json({ error: err.message });
     }
   }
 
@@ -46,7 +46,7 @@ class PedidoController {
 
       res.status(200).json({ message: `Pedido com ID ${id} foi removido com sucesso`, ...result });
     } catch (err) {
-      next(err);
+      res.status(500).json({ error: err.message });
     }
   }
 
@@ -56,7 +56,7 @@ class PedidoController {
 
       res.status(200).json({ message: 'Todos os pedidos foram removidos com sucesso', ...result });
     } catch (err) {
-      next(err);
+      res.status(500).json({ error: err.message });
     }
   }
 
@@ -74,8 +74,9 @@ class PedidoController {
 
       return res.status(200).json({ message: `Status do pedido com ID ${id} foi atualizado para ${status}` });
     } catch (err) {
-      next(err);
+      res.status(500).json({ error: err.message });
     }
+    rror: err.message;
   }
 }
 
