@@ -10,10 +10,7 @@ class PedidoController {
 
       res.status(201).json(pedidoCriado);
     } catch (err) {
-      console.error(`Erro ao criar pedido: ${err.message}`);
-      res.status(500).json({ error: 'Erro ao criar pedido' });
-
-      next(err);
+      res.status(500).json({ error: err.message });
     }
   }
 
@@ -23,40 +20,33 @@ class PedidoController {
 
       res.status(200).json(pedidos);
     } catch (err) {
-      console.error(`Erro ao listar pedidos: ${err.message}`);
-      res.status(500).json({ error: 'Erro ao listar pedidos' });
-
-      next(err);
+      res.status(500).json({ error: err.message });
     }
   }
 
   async buscarPedidoPorId(req, res, next) {
     try {
-      const pedidoId = req.params.id;
-      const pedido = await this.pedidoService.buscarPedidoPorId(pedidoId);
+      const { id } = req.params;
+      const pedido = await this.pedidoService.buscarPedidoPorId(id);
 
       if (!pedido) return res.status(404).json({ error: 'Pedido não encontrado' });
 
       res.status(200).json(pedido);
     } catch (err) {
-      console.error(`Erro ao buscar pedido por ID: ${err.message}`);
-      res.status(500).json({ error: 'Erro ao buscar pedido por ID' });
-
-      next(err);
+      res.status(500).json({ error: err.message });
     }
   }
 
   async deletarPedidoPorId(req, res, next) {
     try {
-      const { id } = req.params.id;
+      const { id } = req.params;
       const result = await this.pedidoService.deletarPedidoPorId(id);
+
+      if (result.deletedCount === 0) return res.status(404).json({ error: 'Pedido não encontrado' });
 
       res.status(200).json({ message: `Pedido com ID ${id} foi removido com sucesso`, ...result });
     } catch (err) {
-      console.error(`Erro ao deletar pedido por ID: ${err.message}`);
-      res.status(500).json({ error: 'Erro ao deletar pedido por ID' });
-
-      next(err);
+      res.status(500).json({ error: err.message });
     }
   }
 
@@ -66,11 +56,27 @@ class PedidoController {
 
       res.status(200).json({ message: 'Todos os pedidos foram removidos com sucesso', ...result });
     } catch (err) {
-      console.error(`Erro ao limpar pedidos: ${err.message}`);
-      res.status(500).json({ error: 'Erro ao deletar todos os pedidos' });
-
-      next(err);
+      res.status(500).json({ error: err.message });
     }
+  }
+
+  async atualizarStatusPedido(req, res, next) {
+    try {
+      const { id } = req.params;
+      const { status } = req.body;
+
+      if (!['Aguardando Pagamento', 'Pendente', 'Preparando', 'Pronto', 'Entregue'].includes(status))
+        return res.status(400).json({ message: 'Status Inválido' });
+
+      const result = await this.pedidoService.atualizarStatusPedido(id, status);
+
+      if (result.modifiedCount === 0) return res.status(404).json({ message: 'Pedido não encontrado' });
+
+      return res.status(200).json({ message: `Status do pedido com ID ${id} foi atualizado para ${status}` });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+    rror: err.message;
   }
 }
 

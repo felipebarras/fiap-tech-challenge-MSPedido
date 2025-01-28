@@ -9,7 +9,7 @@ async function connectToMongo() {
   try {
     const client = await MongoClient.connect(mongoURI);
     db = client.db();
-    console.log(`Conexão com o MongoDB estabelecida! Banco: ${db.databaseName}`);
+    // console.log(`Conexão com o MongoDB estabelecida! Banco: ${db.databaseName}`);
 
     return db;
   } catch (err) {

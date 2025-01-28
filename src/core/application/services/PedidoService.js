@@ -1,3 +1,5 @@
+const { ObjectId } = require('mongodb');
+
 class PedidoService {
   constructor(customerAPI, produtoAPI, mongoDbRepository) {
     this.customerAPI = customerAPI;
@@ -21,8 +23,7 @@ class PedidoService {
 
       return await this.mongoDbRepository.criarPedido(pedido);
     } catch (err) {
-      console.error(`Erro ao criar pedido: ${err}`);
-      throw new Error(`Erro ao criar pedido`);
+      throw new Error(`Erro ao criar pedido: ${err}`);
     }
   }
 
@@ -33,32 +34,29 @@ class PedidoService {
 
       return pedidos;
     } catch (err) {
-      console.error(`Erro ao listar pedidos: ${err}`);
-      throw new Error(`Erro ao listar pedidos`);
+      throw new Error(`Erro ao listar pedidos: ${err}`);
     }
   }
 
-  async buscarPedidoPorId(id) {
+  async buscarPedidoPorId(pedidoId) {
     try {
-      const pedido = await this.mongoDbRepository.buscarPedidoPorId(id);
+      const pedido = await this.mongoDbRepository.buscarPedidoPorId(pedidoId);
       if (!pedido) throw new Error('Pedido não encontrado');
 
       return pedido;
     } catch (err) {
-      console.error(`Erro ao buscar pedido por ID: ${err}`);
-      throw new Error(`Erro ao buscar pedido por ID`);
+      throw new Error(`Erro ao buscar pedido por ID: ${err.message}`);
     }
   }
 
-  async deletarPedidoPorId(id) {
+  async deletarPedidoPorId(pedidoId) {
     try {
-      const pedido = await this.mongoDbRepository.deletarPedidoPorId(id);
+      const pedido = await this.mongoDbRepository.deletarPedidoPorId(pedidoId);
       if (!pedido) throw new Error('Pedido não encontrado');
 
       return pedido;
     } catch (err) {
-      console.error(`Erro ao deletar pedido por ID: ${err}`);
-      throw new Error(`Erro ao deletar pedido por ID`);
+      throw new Error(`Erro ao deletar pedido por ID: ${err.message}`);
     }
   }
 
@@ -69,8 +67,20 @@ class PedidoService {
 
       return result;
     } catch (err) {
-      console.error(`Erro ao limpar pedidos: ${err}`);
-      throw new Error(`Erro ao limpar pedidos`);
+      throw new Error(`Erro ao limpar pedidos: ${err.message}`);
+    }
+  }
+
+  async atualizarStatusPedido(pedidoId, novoStatus) {
+    try {
+      const pedido = await this.mongoDbRepository.buscarPedidoPorId(pedidoId);
+      if (!pedido) throw new Error('Pedido não encontrado');
+
+      const atualizado = await this.mongoDbRepository.atualizarPedido(pedidoId, novoStatus);
+
+      return atualizado;
+    } catch (err) {
+      throw new Error(`Erro ao atualizar status do pedido: ${err.message}`);
     }
   }
 }

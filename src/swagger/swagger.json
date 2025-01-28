@@ -28,7 +28,7 @@
                   { "produtoId": "1", "quantidade": 2 },
                   { "produtoId": "2", "quantidade": 1 }
                 ],
-                "status": "pendente"
+                "status": "Aguardando Pagamento"
               }
             }
           }
@@ -45,7 +45,7 @@
                     { "produtoId": "1", "quantidade": 2 },
                     { "produtoId": "2", "quantidade": 1 }
                   ],
-                  "status": "pendente"
+                  "status": "Aguardando Pagamento"
                 }
               }
             }
@@ -151,6 +151,55 @@
           "500": { "description": "Erro ao remover pedido" }
         }
       }
+    },
+    "/pedidos/{id}/status": {
+      "patch": {
+        "summary": "Atualiza o status de um pedido",
+        "description": "Atualiza o status de um pedido específico pelo ID",
+        "tags": ["Pedidos"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID do pedido a ser atualizado"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "enum": ["Aguardando Pagamento", "Pendente", "Preparando", "Pronto", "Entregue"]
+                  }
+                },
+                "required": ["status"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Status do pedido atualizado com sucesso",
+            "content": {
+              "application/json": {
+                "example": {
+                  "message": "Status do pedido atualizado com sucesso",
+                  "resultado": { "matchedCount": 1, "modifiedCount": 1 }
+                }
+              }
+            }
+          },
+          "400": { "description": "Status inválido" },
+          "404": { "description": "Pedido não encontrado" },
+          "500": { "description": "Erro ao atualizar o status do pedido" }
+        }
+      }
     }
   },
   "components": {
@@ -165,8 +214,8 @@
           },
           "status": {
             "type": "string",
-            "enum": ["pendente", "em_preparacao", "pronto", "entregue"],
-            "example": "pendente"
+            "enum": ["Aguardando Pagamento", "Pendente", "Preparando", "Pronto", "Entregue"],
+            "example": "Aguardando Pagamento"
           }
         },
         "required": ["clienteCPF", "itens", "status"]
@@ -182,8 +231,8 @@
           },
           "status": {
             "type": "string",
-            "enum": ["pendente", "em_preparacao", "pronto", "entregue"],
-            "example": "pendente"
+            "enum": ["Aguardando Pagamento", "Pendente", "Preparando", "Pronto", "Entregue"],
+            "example": "Aguardando Pagamento"
           }
         }
       },
