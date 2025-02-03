@@ -42,7 +42,7 @@ class PedidoService {
         itens: dadosDosItens,
         status: pedido.status,
         total: totalCompra,
-        criadoEm: new Date().toISOString()
+        criadoEm: new Date()
       };
 
       console.log(`Produtos encontrados! Novo pedido criado: ${JSON.stringify(novoPedido)}`);
