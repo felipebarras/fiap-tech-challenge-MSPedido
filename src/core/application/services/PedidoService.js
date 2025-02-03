@@ -1,3 +1,4 @@
+const { json } = require('body-parser');
 const { ObjectId } = require('mongodb');
 
 class PedidoService {
@@ -15,13 +16,38 @@ class PedidoService {
       if (!cliente) throw new Error('Cliente não encontrado');
       console.log(`Cliente encontrado: ${JSON.stringify(cliente)}`);
 
-      // validando produtos
+      console.log('Verificando produtos do pedido...');
+
+      const dadosDosItens = [];
+      let totalCompra = 0;
+
       for (const item of pedido.itens) {
         const produto = await this.produtoAPI.consultarPorId(item.produtoId);
-        if (!produto) throw new Error('Produto não encontrado');
+
+        if (!produto) throw new Error(`Produto ${item.produtoId} não encontrado`);
+
+        dadosDosItens.push({
+          produtoId: item.produtoId,
+          nome: produto.nome,
+          descricao: produto.descricao,
+          categoria: produto.categoria,
+          preco: produto.preco,
+          quantidade: item.quantidade
+        });
+        totalCompra += produto.preco * item.quantidade;
       }
 
-      return await this.mongoDbRepository.criarPedido(pedido);
+      const novoPedido = {
+        clienteCPF: pedido.clienteCPF,
+        itens: dadosDosItens,
+        status: pedido.status,
+        total: totalCompra,
+        criadoEm: new Date().toISOString()
+      };
+
+      console.log(`Produtos encontrados! Novo pedido criado: ${JSON.stringify(novoPedido)}`);
+
+      return await this.mongoDbRepository.criarPedido(novoPedido);
     } catch (err) {
       throw new Error(`Erro ao criar pedido: ${err}`);
     }
