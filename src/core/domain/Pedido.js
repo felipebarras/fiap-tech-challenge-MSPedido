@@ -1,5 +1,5 @@
 class Pedido {
-  constructor(cliente, itens, status = 'Aguardando Pagamento', criadoEm = new Date()) {
+  constructor(cliente, itens, status = 'Aguardando Pagamento', criadoEm) {
     this.cliente = cliente;
     this.itens = itens;
     this.status = status;
