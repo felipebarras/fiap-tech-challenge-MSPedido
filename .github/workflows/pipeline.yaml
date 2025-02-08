@@ -5,6 +5,8 @@ on:
     branches:
       - main
   pull_request:
+    types:
+      - closed  # Only triggers when a PR is merged
     branches:
       - main
 
