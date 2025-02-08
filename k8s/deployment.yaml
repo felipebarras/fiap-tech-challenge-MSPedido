@@ -21,11 +21,27 @@ spec:
           ports:
             - name: http
               containerPort: 3000
-          envFrom:
-            - configMapRef:
-              name: pedido-config
-            - secretRef:
-              name: pedido-secrets
+          env:
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: pedido-config
+                  key: PORT
+            - name: MONGO_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: pedido-config
+                  key: MONGO_URI
+            - name: CUSTOMER_API_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: pedido-config
+                  key: CUSTOMER_API_URI
+            - name: PRODUCT_API_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: pedido-config
+                  key: PRODUCT_API_URI
           resources:
             limits:
               cpu: '0.5'
@@ -35,10 +51,10 @@ spec:
               path: /api/v1/health
               port: 3000
             initialDelaySeconds: 10
-            periodSeconds: 5
+            periodSeconds: 10
           readinessProbe:
             httpGet:
               path: /api/v1/health
               port: 3000
             initialDelaySeconds: 10
-            periodSeconds: 5
+            periodSeconds: 10
