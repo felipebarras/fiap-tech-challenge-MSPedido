@@ -5,12 +5,6 @@
     "version": "1.0.0",
     "description": "API para gerenciar pedidos em uma lanchonete"
   },
-  "servers": [
-    {
-      "url": "http://localhost:3000/api/v1",
-      "description": "Servidor local"
-    }
-  ],
   "paths": {
     "/pedidos": {
       "post": {
