@@ -17,7 +17,7 @@ spec:
       serviceAccountName: pedido-service-account # gostei dessa ideia para integrar com o AWS IAM
       containers:
         - name: pedido-container
-          image: 666881761373.dkr.ecr.us-east-1.amazonaws.com/order:latest # esse é o container certo?
+          image: 666881761373.dkr.ecr.us-east-1.amazonaws.com/order:latest
           ports:
             - name: http
               containerPort: 3000
@@ -32,13 +32,13 @@ spec:
               memory: '512Mi'
           livenessProbe:
             httpGet:
-              path: /health
+              path: /api/v1/health
               port: 3000
             initialDelaySeconds: 10
             periodSeconds: 5
           readinessProbe:
             httpGet:
-              path: /health
+              path: /api/v1/health
               port: 3000
             initialDelaySeconds: 10
             periodSeconds: 5

@@ -3,6 +3,10 @@ class PedidoController {
     this.pedidoService = pedidoService;
   }
 
+  async healthCheck(req, res, next) {
+    res.status(200).json({ status: 'UP!' });
+  }
+
   async criarPedido(req, res, next) {
     try {
       const novoPedido = req.body;
