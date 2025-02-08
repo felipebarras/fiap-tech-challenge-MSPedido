@@ -76,7 +76,6 @@ class PedidoController {
     } catch (err) {
       res.status(500).json({ error: err.message });
     }
-    rror: err.message;
   }
 }
 
