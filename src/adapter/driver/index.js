@@ -31,6 +31,8 @@ app.use(express.json());
     app.use('/api/v1/swagger-ui', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
     // rotas da API
+    app.get('/api/v1/health', (req, res, next) => pedidoController.healthCheck(req, res, next));
+
     app.post('/api/v1/pedidos', (req, res, next) => pedidoController.criarPedido(req, res, next));
     app.get('/api/v1/pedidos', (req, res, next) => pedidoController.listarPedidos(req, res, next));
     app.get('/api/v1/pedidos/:id', (req, res, next) => pedidoController.buscarPedidoPorId(req, res, next));
