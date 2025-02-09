@@ -1,6 +1,3 @@
-const { json } = require('body-parser');
-const { ObjectId } = require('mongodb');
-
 class PedidoService {
   constructor(customerAPI, produtoAPI, mongoDbRepository) {
     this.customerAPI = customerAPI;

@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">75.6% </span>
+                <span class="strong">78.04% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>31/41</span>
+                <span class='fraction'>32/41</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">16.66% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>1/6</span>
+                <span class='fraction'>3/6</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">81.57% </span>
+                <span class="strong">84.21% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>31/38</span>
+                <span class='fraction'>32/38</span>
             </div>
         
             
@@ -198,36 +198,36 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -281,13 +281,13 @@ class MongoPedidoRepository extends PedidoRepositoryPort {
   async deletarPedidoPorId(pedidoId) {
     try {
       const result = await this.database.collection('pedidos').deleteOne({ pedidoId });
-      if (result.deletedCount === 0) <span class="cstat-no" title="statement not covered" >throw new Error('Pedido não encontrado');</span>
+      <span class="missing-if-branch" title="if path not taken" >I</span>if (result.deletedCount === 0) <span class="cstat-no" title="statement not covered" >throw new Error('Pedido não encontrado');</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      console.log(`Pedido ${pedidoId} deletado com sucesso`);</span>
+      console.log(`Pedido ${pedidoId} deletado com sucesso`);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      return result;</span>
+      return result;
     } catch (err) {
-      throw new Error(`Erro ao deletar pedido por ID: ${err}`);
+<span class="cstat-no" title="statement not covered" >      throw new Error(`Erro ao deletar pedido por ID: ${err}`);</span>
     }
   }
 &nbsp;
@@ -299,20 +299,20 @@ class MongoPedidoRepository extends PedidoRepositoryPort {
 &nbsp;
       return { aknowledged: result.aknowledged, deletedCount: result.deletedCount };
     } catch (err) {
-      throw new Error(`Erro ao limpar banco: ${err}`);
+<span class="cstat-no" title="statement not covered" >      throw new Error(`Erro ao limpar banco: ${err}`);</span>
     }
   }
 &nbsp;
   async atualizarPedido(pedidoId, novoStatus) {
     try {
       const result = await this.database.collection('pedidos').updateOne({ pedidoId }, { $set: { status: novoStatus } });
-      if (result.matchedCount === 0) <span class="cstat-no" title="statement not covered" >throw new Error('Pedido não encontrado');</span>
+      <span class="missing-if-branch" title="if path not taken" >I</span>if (result.matchedCount === 0) <span class="cstat-no" title="statement not covered" >throw new Error('Pedido não encontrado');</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      console.log(`Pedido ${pedidoId} atualizado para: ${JSON.stringify(result)}`);</span>
+      console.log(`Pedido ${pedidoId} atualizado para: ${JSON.stringify(result)}`);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      return result;</span>
+      return result;
     } catch (err) {
-      throw new Error(`Erro ao atualizar pedido: ${err}`);
+<span class="cstat-no" title="statement not covered" >      throw new Error(`Erro ao atualizar pedido: ${err}`);</span>
     }
   }
 }
@@ -325,7 +325,7 @@ module.exports = MongoPedidoRepository;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-02-09T17:31:40.110Z
+                at 2025-02-09T18:01:55.461Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

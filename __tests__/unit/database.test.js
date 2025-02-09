@@ -13,7 +13,7 @@ describe('Database - Testes', () => {
   });
 
   test('Deve lançar erro se a conexão falhar', async () => {
-    MongoClient.connect.mockRejectedValue(new Error('Erro ao conectar ao MongoDB'));
+    MongoClient.connect = jest.fn().mockRejectedValue(new Error('Erro ao conectar ao MongoDB'));
 
     await expect(connectToMongo()).rejects.toThrow('erro aonectar ao MongoDB');
   });
