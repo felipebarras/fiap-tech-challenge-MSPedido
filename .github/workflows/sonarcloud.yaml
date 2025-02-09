@@ -42,7 +42,7 @@ jobs:
         run: |
           npx sonarqube-scanner \
             -Dsonar.organization=ms-pedido \
-            -Dsonar.projectKey=fiap-tech-challenge-MSPedido \
+            -Dsonar.projectKey=felipebarras_fiap-tech-challenge-MSPedido \
             -Dsonar.sources=src \
             -Dsonar.exclusions=src/__tests__/** \
             -Dsonar.host.url=https://sonarcloud.io
