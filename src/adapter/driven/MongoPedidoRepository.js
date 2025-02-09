@@ -62,7 +62,7 @@ class MongoPedidoRepository extends PedidoRepositoryPort {
 
       console.log(`Banco de dados limpo com sucesso.`);
 
-      return { aknowledged: result.aknowledged, deletedCount: result.deletedCount };
+      return { acknowledged: result.acknowledged, deletedCount: result.deletedCount };
     } catch (err) {
       throw new Error(`Erro ao limpar banco: ${err}`);
     }

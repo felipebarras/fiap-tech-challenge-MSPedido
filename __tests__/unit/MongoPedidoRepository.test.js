@@ -5,9 +5,9 @@ describe('MongoPedidoRepository - Testes', () => {
 
   beforeEach(() => {
     collectionMock = {
-      insertOne: jest.fn().mockResolvedValue({ pedidoId: '1' }),
-      find: jest.fn().mockReturnValue({ toArray: jest.fn().mockResolvedValue([]) }),
-      findOne: jest.fn().mockResolvedValue(null),
+      insertOne: jest.fn().mockResolvedValue({ insertedId: '123' }),
+      find: jest.fn().mockReturnValue({ toArray: jest.fn().mockResolvedValue([{ pedidoId: '123', clienteCPF: '12345678910', itens: [] }]) }),
+      findOne: jest.fn().mockResolvedValue({ pedidoId: '123', clienteCPF: '12345678910', itens: [] }),
       deleteOne: jest.fn().mockResolvedValue({ deletedCount: 1 }),
       deleteMany: jest.fn().mockResolvedValue({ acknowledged: true, deletedCount: 10 }),
       updateOne: jest.fn().mockResolvedValue({ matchedCount: 1, modifiedCount: 1 })
