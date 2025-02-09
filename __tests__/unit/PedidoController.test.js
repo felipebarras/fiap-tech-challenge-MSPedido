@@ -165,8 +165,6 @@ describe('PedidoController - Testes de Erro', () => {
   });
 
   test('Deve retornar 400 se o status informado for inválido', async () => {
-    pedidoServiceMock.atualizarStatusPedido.mockRejectedValue(new Error('Status Inválido'));
-
     req.params.id = '123';
     req.body.status = 'invalido';
 
@@ -189,11 +187,14 @@ describe('PedidoController - Testes de Erro', () => {
   });
 
   test('Deve retornar 500 se houver erro ao atualizar status do pedido', async () => {
-    pedidoServiceMock.atualizarStatusPedido.mockRejectedValue(new Error('Erro ao atualizar status'));
+    pedidoServiceMock.atualizarStatusPedido.mockRejectedValue(new Error('Erro no banco'));
+
+    req.params.id = '123';
+    req.body.status = 'Pronto';
 
     await pedidoController.atualizarStatusPedido(req, res, next);
 
     expect(res.status).toHaveBeenCalledWith(500);
-    expect(res.json).toHaveBeenCalledWith({ error: 'Erro ao atualizar status' });
+    expect(res.json).toHaveBeenCalledWith({ error: 'Erro no banco' });
   });
 });
