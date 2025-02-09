@@ -27,11 +27,6 @@ spec:
                 configMapKeyRef:
                   name: pedido-config
                   key: PORT
-            - name: MONGO_URI
-              valueFrom:
-                secretKeyRef:
-                  name: pedido-secrets
-                  key: MONGO_URI
             - name: MONGO_URI_ONLINE
               valueFrom:
                 secretKeyRef:
