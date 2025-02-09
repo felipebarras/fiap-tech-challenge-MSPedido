@@ -5,7 +5,7 @@ metadata:
   labels:
     app: pedido-service
 spec:
-  replicas: 1
+  recplicas: 1
   selector:
     matchLabels:
       app: pedido-service
@@ -14,7 +14,7 @@ spec:
       labels:
         app: pedido-service
     spec:
-      serviceAccountName: pedido-service-account # gostei dessa ideia para integrar com o AWS IAM
+      serviceAccountName: pedido-service-account # AWS IAM
       containers:
         - name: pedido-container
           image: 666881761373.dkr.ecr.us-east-1.amazonaws.com/order:latest
@@ -29,17 +29,22 @@ spec:
                   key: PORT
             - name: MONGO_URI
               valueFrom:
-                configMapKeyRef:
-                  name: pedido-config
+                secretKeyRef:
+                  name: pedido-secrets
                   key: MONGO_URI
+            - name: MONGO_URI_ONLINE
+              valueFrom:
+                secretKeyRef:
+                  name: pedido-secrets
+                  key: MONGO_URI_ONLINE
             - name: CUSTOMER_API_URI
               valueFrom:
-                configMapKeyRef:
+                secretKeyRef:
                   name: pedido-config
                   key: CUSTOMER_API_URI
             - name: PRODUCT_API_URI
               valueFrom:
-                configMapKeyRef:
+                secretKeyRef:
                   name: pedido-config
                   key: PRODUCT_API_URI
           resources:
