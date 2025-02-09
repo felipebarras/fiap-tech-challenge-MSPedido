@@ -5,8 +5,6 @@ metadata:
   labels:
     app: pedido-service
 data:
-  MONGO_URI: 'mongodb://pedido-db:27017/pedidos_db'
   PORT: '3000'
-  MONGO_URI: 'mongodb+srv://felipebarras:palmeiras2711@fiap-tech-challenge-msp.ukkig.mongodb.net/pedidos_db?retryWrites=true&w=majority&appName=fiap-tech-challenge-MSPedidos'
   CUSTOMER_API_URI: 'http://a59baeb8e3ab04ea580590ceeb316c37-631762596.us-east-1.elb.amazonaws.com:8080/api/v1/cliente'
   PRODUCT_API_URI: 'http://afb9ef447c3684e6aaf399493a751c85-1135239877.us-east-1.elb.amazonaws.com:8080/api/v1/produtos'
