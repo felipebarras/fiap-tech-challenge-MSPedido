@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1739126324668" clover="3.2.0">
-  <project timestamp="1739126324668" name="All files">
-    <metrics statements="218" coveredstatements="143" conditionals="35" coveredconditionals="23" methods="45" coveredmethods="25" elements="298" coveredelements="191" complexity="0" loc="218" ncloc="218" packages="6" files="11" classes="11"/>
+<coverage generated="1739215387608" clover="3.2.0">
+  <project timestamp="1739215387608" name="All files">
+    <metrics statements="218" coveredstatements="147" conditionals="35" coveredconditionals="23" methods="45" coveredmethods="26" elements="298" coveredelements="196" complexity="0" loc="218" ncloc="218" packages="6" files="11" classes="11"/>
     <package name="adapter.driven">
-      <metrics statements="68" coveredstatements="51" conditionals="6" coveredconditionals="3" methods="11" coveredmethods="10"/>
+      <metrics statements="68" coveredstatements="55" conditionals="6" coveredconditionals="3" methods="11" coveredmethods="11"/>
       <file name="CustomerAPIAdapter.js" path="C:\Users\felip\dev\pos\microservices\fiap-tech-challenge-MSPedido\src\adapter\driven\CustomerAPIAdapter.js">
-        <metrics statements="9" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="1" count="0" type="stmt"/>
-        <line num="2" count="0" type="stmt"/>
-        <line num="6" count="0" type="stmt"/>
-        <line num="7" count="0" type="stmt"/>
-        <line num="9" count="0" type="stmt"/>
+        <metrics statements="9" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="9" count="1" type="stmt"/>
         <line num="11" count="0" type="stmt"/>
         <line num="12" count="0" type="stmt"/>
         <line num="13" count="0" type="stmt"/>
-        <line num="18" count="0" type="stmt"/>
+        <line num="18" count="1" type="stmt"/>
       </file>
       <file name="MongoPedidoRepository.js" path="C:\Users\felip\dev\pos\microservices\fiap-tech-challenge-MSPedido\src\adapter\driven\MongoPedidoRepository.js">
         <metrics statements="38" coveredstatements="32" conditionals="6" coveredconditionals="3" methods="7" coveredmethods="7"/>
@@ -58,19 +58,19 @@
         <line num="85" count="1" type="stmt"/>
       </file>
       <file name="ProdutoAPIAdapter.js" path="C:\Users\felip\dev\pos\microservices\fiap-tech-challenge-MSPedido\src\adapter\driven\ProdutoAPIAdapter.js">
-        <metrics statements="13" coveredstatements="11" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
+        <metrics statements="13" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
         <line num="6" count="1" type="stmt"/>
         <line num="7" count="1" type="stmt"/>
-        <line num="9" count="0" type="stmt"/>
-        <line num="11" count="1" type="stmt"/>
-        <line num="12" count="1" type="stmt"/>
+        <line num="9" count="1" type="stmt"/>
+        <line num="11" count="0" type="stmt"/>
+        <line num="12" count="0" type="stmt"/>
         <line num="17" count="1" type="stmt"/>
         <line num="18" count="1" type="stmt"/>
-        <line num="20" count="0" type="stmt"/>
-        <line num="22" count="1" type="stmt"/>
-        <line num="23" count="1" type="stmt"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="23" count="0" type="stmt"/>
         <line num="28" count="1" type="stmt"/>
       </file>
       <file name="database.js" path="C:\Users\felip\dev\pos\microservices\fiap-tech-challenge-MSPedido\src\adapter\driven\database.js">
@@ -163,11 +163,11 @@
         <line num="53" count="0" type="stmt"/>
         <line num="55" count="0" type="stmt"/>
         <line num="57" count="0" type="stmt"/>
-        <line num="59" count="0" type="stmt"/>
-        <line num="60" count="0" type="stmt"/>
+        <line num="58" count="0" type="stmt"/>
+        <line num="63" count="0" type="stmt"/>
+        <line num="64" count="0" type="stmt"/>
         <line num="65" count="0" type="stmt"/>
-        <line num="66" count="0" type="stmt"/>
-        <line num="67" count="0" type="stmt"/>
+        <line num="68" count="0" type="stmt"/>
         <line num="70" count="0" type="stmt"/>
       </file>
     </package>
@@ -267,8 +267,8 @@
       <metrics statements="2" coveredstatements="2" conditionals="4" coveredconditionals="2" methods="0" coveredmethods="0"/>
       <file name="env.js" path="C:\Users\felip\dev\pos\microservices\fiap-tech-challenge-MSPedido\src\shared\env.js">
         <metrics statements="2" coveredstatements="2" conditionals="4" coveredconditionals="2" methods="0" coveredmethods="0"/>
-        <line num="1" count="2" type="stmt"/>
-        <line num="3" count="2" type="stmt"/>
+        <line num="1" count="3" type="stmt"/>
+        <line num="3" count="3" type="stmt"/>
       </file>
     </package>
   </project>

@@ -18,11 +18,17 @@ describe('MongoPedidoRepository - Testes', () => {
   });
 
   test('Deve criar um novo pedido no banco', async () => {
-    const pedidoMock = { clienteCPF: '12345678910', itens: [] };
+    const pedidoMock = {
+      clienteCPF: '12345678910',
+      itens: { produtoId: '1', nome: 'Pizza', descricao: 'Pizza de frango', categoria: 'LANCHE', preco: 29.9, quantidade: 1 },
+      status: 'Preparando',
+      total: 29.9,
+      criadoEm: new Date()
+    };
     const result = await repository.criarPedido(pedidoMock);
 
     expect(collectionMock.insertOne).toHaveBeenCalledWith(pedidoMock);
-    expect(result).toEqual({ pedidoId: '123' });
+    expect(result).toEqual({ pedidoId: '123', ...pedidoMock });
   });
 
   test('Deve listar todos os pedidos', async () => {

@@ -7,7 +7,7 @@ const PedidoService = require('../../core/application/services/PedidoService');
 const PedidoController = require('./PedidoController');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('../../swagger/swagger.json');
-const { port, swaggerHost, swaggerProtocol } = require('../../shared/env');
+const { port } = require('../../shared/env');
 
 const app = express();
 app.use(express.json());
@@ -15,7 +15,7 @@ app.use(express.json());
 (async () => {
   try {
     const db = await connectToMongo();
-    console.log(`Banco conectado: ${db.databaseName}`);
+    console.log(`✅ Banco conectado: ${db.databaseName}`);
 
     // Adapters
     const customerAPIAdapter = new CustomerAPIAdapter();
@@ -34,7 +34,7 @@ app.use(express.json());
         const protocol = req.protocol || swaggerProtocol;
         const host = req.get('Host') || swaggerHost;
 
-        swaggerDocument.servers = [{ url: `${protocol}:${host}/api/v1`, description: 'Servidor do cliente' }];
+        swaggerDocument.servers = [{ url: `${protocol}://${host}/api/v1`, description: 'Servidor do cliente' }];
 
         next();
       },
@@ -49,14 +49,12 @@ app.use(express.json());
     app.get('/api/v1/pedidos', (req, res, next) => pedidoController.listarPedidos(req, res, next));
     app.get('/api/v1/pedidos/:id', (req, res, next) => pedidoController.buscarPedidoPorId(req, res, next));
 
-    app.delete('/api/v1/pedidos/', (req, res, next) => pedidoController.limparBancoDeDados(req, res, next));
+    app.delete('/api/v1/pedidos', (req, res, next) => pedidoController.limparBancoDeDados(req, res, next));
     app.delete('/api/v1/pedidos/:id', (req, res, next) => pedidoController.deletarPedidoPorId(req, res, next));
 
     app.patch('/api/v1/pedidos/:id/status', (req, res, next) => pedidoController.atualizarStatusPedido(req, res, next));
-
-    app.listen(port, () => console.log(`Servidor rodando na porta ${port}`));
   } catch (err) {
-    console.error(`Erro ao iniciar o servidor: ${err}`);
+    console.error(`❌ Erro ao iniciar o servidor: ${err}`);
     process.exit(1);
   }
 })();
@@ -66,5 +64,7 @@ app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send({ error: 'Algo deu errado no servidor!' });
 });
+
+app.listen(port, () => console.log(`🚀 Servidor rodando na porta ${port}`));
 
 module.exports = app;

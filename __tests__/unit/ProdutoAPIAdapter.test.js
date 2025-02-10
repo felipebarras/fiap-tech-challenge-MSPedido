@@ -1,28 +1,37 @@
+const axios = require('axios');
 const ProdutoAPIAdapter = require('../../src/adapter/driven/ProdutoAPIAdapter');
+const { productURI } = require('../../src/shared/env');
+
+jest.mock('axios');
 
 describe('ProdutoAPIAdapter - Testes', () => {
-  let apiAdapter, httpClientMock;
+  let apiAdapter, pedidoMock;
 
-  beforeEach(() => {
-    httpClientMock = { get: jest.fn() };
-    apiAdapter = new ProdutoAPIAdapter(httpClientMock);
-  });
+  beforeEach(() => (apiAdapter = new ProdutoAPIAdapter()));
+
+  pedidoMock = {
+    produtoId: 1,
+    nome: 'X-Tudo',
+    descricao: 'Lanche com hambúrguer, alface, tomate, cebola, bacon e maionese.',
+    preco: 15.99,
+    categoria: 'LANCHE'
+  };
 
   test('Deve consultar um produto pelo ID', async () => {
-    httpClientMock.get.mockResolvedValue({ data: { id: '1', nome: 'Pizza', preco: 29.9, categoria: 'LANCHE' } });
+    axios.get.mockResolvedValue({ data: pedidoMock });
 
-    const result = await apiAdapter.consultarPorId('1');
+    const result = await apiAdapter.consultarPorId(1);
 
-    expect(httpClientMock.get).toHaveBeenCalledWith('api/v1/produtos/1');
-    expect(result).toEqual({ id: '1', nome: 'Pizza', preco: 29.9 });
+    expect(axios.get).toHaveBeenCalledWith(`${productURI}/1`);
+    expect(result).toEqual(pedidoMock);
   });
 
   test('Deve consultar um produto pela categoria', async () => {
-    httpClientMock.get.mockResolvedValue({ data: { id: '1', nome: 'Pizza', preco: 29.9, categoria: 'LANCHE' } });
+    axios.get.mockResolvedValue({ data: pedidoMock });
 
     const result = await apiAdapter.consultarPorCategoria('LANCHE');
 
-    expect(httpClientMock.get).toHaveBeenCalledWith('api/v1/produtos/categoria/LANCHE');
-    expect(result).toEqual({ id: '1', nome: 'Pizza', preco: 29.9, categoria: 'LANCHE' });
+    expect(axios.get).toHaveBeenCalledWith(`${productURI}/categoria/LANCHE`);
+    expect(result).toEqual(pedidoMock);
   });
 });
