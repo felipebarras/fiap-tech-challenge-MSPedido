@@ -1,5 +1,6 @@
 const request = require('supertest');
 const express = require('express');
+const app = require('../../src/adapter/driver/index');
 
 jest.mock('../../src/adapter/driven/database', () => ({ connectToMongo: jest.fn().mockResolvedValue({ databaseName: 'test_db' }) }));
 
@@ -102,5 +103,24 @@ describe('API - Testes de integração do Index.js', () => {
     const response = await request(app).get('/api/v1/inexistente');
 
     expect(response.status).toBe(404);
+  });
+
+  // teste de header do Swagger
+  test('Deve retornar erro 400 se faltar um header necessário', async () => {
+    const response = await request(app).get('/api/v1/swagger-ui').set('Host', ''); // Simulando um header ausente
+
+    expect(response.status).toBe(400);
+  });
+
+  // teste de erro de Middleware
+  test('Deve retornar 500 para qualquer erro interno', async () => {
+    app.get('/api/v1/testeErro', (req, res, next) => {
+      throw new Error('Erro interno');
+    });
+
+    const response = await request(app).get('/api/v1/testeErro');
+
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({ error: 'Algo deu errado no servidor!' });
   });
 });

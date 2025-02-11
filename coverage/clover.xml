@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1739232178324" clover="3.2.0">
-  <project timestamp="1739232178324" name="All files">
-    <metrics statements="218" coveredstatements="147" conditionals="35" coveredconditionals="23" methods="45" coveredmethods="26" elements="298" coveredelements="196" complexity="0" loc="218" ncloc="218" packages="6" files="11" classes="11"/>
+<coverage generated="1739285349149" clover="3.2.0">
+  <project timestamp="1739285349150" name="All files">
+    <metrics statements="218" coveredstatements="179" conditionals="35" coveredconditionals="23" methods="45" coveredmethods="28" elements="298" coveredelements="230" complexity="0" loc="218" ncloc="218" packages="6" files="11" classes="11"/>
     <package name="adapter.driven">
       <metrics statements="68" coveredstatements="55" conditionals="6" coveredconditionals="3" methods="11" coveredmethods="11"/>
       <file name="CustomerAPIAdapter.js" path="C:\Users\felip\dev\pos\microservices\fiap-tech-challenge-MSPedido\src\adapter\driven\CustomerAPIAdapter.js">
@@ -86,7 +86,7 @@
       </file>
     </package>
     <package name="adapter.driver">
-      <metrics statements="77" coveredstatements="35" conditionals="12" coveredconditionals="8" methods="19" coveredmethods="7"/>
+      <metrics statements="77" coveredstatements="67" conditionals="12" coveredconditionals="8" methods="19" coveredmethods="9"/>
       <file name="PedidoController.js" path="C:\Users\felip\dev\pos\microservices\fiap-tech-challenge-MSPedido\src\adapter\driver\PedidoController.js">
         <metrics statements="37" coveredstatements="35" conditionals="8" coveredconditionals="8" methods="8" coveredmethods="7"/>
         <line num="3" count="15" type="stmt"/>
@@ -128,47 +128,47 @@
         <line num="86" count="2" type="stmt"/>
       </file>
       <file name="index.js" path="C:\Users\felip\dev\pos\microservices\fiap-tech-challenge-MSPedido\src\adapter\driver\index.js">
-        <metrics statements="40" coveredstatements="0" conditionals="4" coveredconditionals="0" methods="11" coveredmethods="0"/>
-        <line num="1" count="0" type="stmt"/>
-        <line num="2" count="0" type="stmt"/>
-        <line num="3" count="0" type="stmt"/>
-        <line num="4" count="0" type="stmt"/>
-        <line num="5" count="0" type="stmt"/>
-        <line num="6" count="0" type="stmt"/>
-        <line num="7" count="0" type="stmt"/>
-        <line num="8" count="0" type="stmt"/>
-        <line num="9" count="0" type="stmt"/>
-        <line num="10" count="0" type="stmt"/>
-        <line num="12" count="0" type="stmt"/>
-        <line num="13" count="0" type="stmt"/>
-        <line num="15" count="0" type="stmt"/>
-        <line num="16" count="0" type="stmt"/>
-        <line num="17" count="0" type="stmt"/>
-        <line num="18" count="0" type="stmt"/>
-        <line num="21" count="0" type="stmt"/>
-        <line num="22" count="0" type="stmt"/>
-        <line num="24" count="0" type="stmt"/>
-        <line num="25" count="0" type="stmt"/>
-        <line num="28" count="0" type="stmt"/>
-        <line num="31" count="0" type="stmt"/>
+        <metrics statements="40" coveredstatements="32" conditionals="4" coveredconditionals="0" methods="11" coveredmethods="2"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="9" count="1" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="13" count="1" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="16" count="1" type="stmt"/>
+        <line num="17" count="1" type="stmt"/>
+        <line num="18" count="1" type="stmt"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="22" count="1" type="stmt"/>
+        <line num="24" count="1" type="stmt"/>
+        <line num="25" count="1" type="stmt"/>
+        <line num="28" count="1" type="stmt"/>
+        <line num="31" count="1" type="stmt"/>
         <line num="34" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="35" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="37" count="0" type="stmt"/>
         <line num="39" count="0" type="stmt"/>
-        <line num="46" count="0" type="stmt"/>
-        <line num="48" count="0" type="stmt"/>
-        <line num="49" count="0" type="stmt"/>
-        <line num="50" count="0" type="stmt"/>
-        <line num="52" count="0" type="stmt"/>
-        <line num="53" count="0" type="stmt"/>
-        <line num="55" count="0" type="stmt"/>
+        <line num="46" count="1" type="stmt"/>
+        <line num="48" count="1" type="stmt"/>
+        <line num="49" count="1" type="stmt"/>
+        <line num="50" count="1" type="stmt"/>
+        <line num="52" count="1" type="stmt"/>
+        <line num="53" count="1" type="stmt"/>
+        <line num="55" count="1" type="stmt"/>
         <line num="57" count="0" type="stmt"/>
         <line num="58" count="0" type="stmt"/>
-        <line num="63" count="0" type="stmt"/>
+        <line num="63" count="1" type="stmt"/>
         <line num="64" count="0" type="stmt"/>
         <line num="65" count="0" type="stmt"/>
-        <line num="68" count="0" type="stmt"/>
-        <line num="70" count="0" type="stmt"/>
+        <line num="68" count="1" type="stmt"/>
+        <line num="70" count="1" type="stmt"/>
       </file>
     </package>
     <package name="core.application.ports">
@@ -267,8 +267,8 @@
       <metrics statements="2" coveredstatements="2" conditionals="4" coveredconditionals="2" methods="0" coveredmethods="0"/>
       <file name="env.js" path="C:\Users\felip\dev\pos\microservices\fiap-tech-challenge-MSPedido\src\shared\env.js">
         <metrics statements="2" coveredstatements="2" conditionals="4" coveredconditionals="2" methods="0" coveredmethods="0"/>
-        <line num="1" count="5" type="stmt"/>
-        <line num="3" count="5" type="stmt"/>
+        <line num="1" count="6" type="stmt"/>
+        <line num="3" count="6" type="stmt"/>
       </file>
     </package>
   </project>
