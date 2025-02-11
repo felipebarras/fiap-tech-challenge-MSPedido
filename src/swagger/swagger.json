@@ -6,7 +6,7 @@
     "description": "API para gerenciar pedidos em uma lanchonete"
   },
   "paths": {
-    "/pedidos": {
+    "/api/v1/pedidos": {
       "post": {
         "summary": "Cria um novo pedido",
         "description": "Cria um pedido validando o cliente pelo CPF e os itens (produtos) por ID.",
@@ -17,10 +17,10 @@
             "application/json": {
               "schema": { "$ref": "#/components/schemas/PedidoRequest" },
               "example": {
-                "clienteCPF": "12345678900",
+                "clienteCPF": "12345678910",
                 "itens": [
-                  { "produtoId": "1", "quantidade": 2 },
-                  { "produtoId": "2", "quantidade": 1 }
+                  { "produtoId": 1, "quantidade": 2 },
+                  { "produtoId": 2, "quantidade": 1 }
                 ],
                 "status": "Aguardando Pagamento"
               }
@@ -34,10 +34,10 @@
               "application/json": {
                 "example": {
                   "id": "1",
-                  "clienteCPF": "12345678900",
+                  "clienteCPF": "12345678910",
                   "itens": [
-                    { "produtoId": "1", "quantidade": 2 },
-                    { "produtoId": "2", "quantidade": 1 }
+                    { "produtoId": 1, "quantidade": 2 },
+                    { "produtoId": 2, "quantidade": 1 }
                   ],
                   "status": "Aguardando Pagamento"
                 }
@@ -88,7 +88,7 @@
         }
       }
     },
-    "/pedidos/{id}": {
+    "/api/v1/pedidos/{id}": {
       "get": {
         "summary": "Busca pedido por ID",
         "description": "Retorna os detalhes de um pedido específico",
@@ -146,7 +146,7 @@
         }
       }
     },
-    "/pedidos/{id}/status": {
+    "/api/v1/pedidos/{id}/status": {
       "patch": {
         "summary": "Atualiza o status de um pedido",
         "description": "Atualiza o status de um pedido específico pelo ID",
@@ -201,7 +201,7 @@
       "PedidoRequest": {
         "type": "object",
         "properties": {
-          "clienteCPF": { "type": "string", "example": "12345678900" },
+          "clienteCPF": { "type": "string", "example": "12345678910" },
           "itens": {
             "type": "array",
             "items": { "$ref": "#/components/schemas/Item" }
@@ -218,7 +218,7 @@
         "type": "object",
         "properties": {
           "id": { "type": "string", "example": "1" },
-          "clienteCPF": { "type": "string", "example": "12345678900" },
+          "clienteCPF": { "type": "string", "example": "12345678910" },
           "itens": {
             "type": "array",
             "items": { "$ref": "#/components/schemas/Item" }
@@ -233,7 +233,7 @@
       "Item": {
         "type": "object",
         "properties": {
-          "produtoId": { "type": "string", "example": "1" },
+          "produtoId": { "type": "integer", "example": 1 },
           "quantidade": { "type": "integer", "example": 2 }
         },
         "required": ["produtoId", "quantidade"]

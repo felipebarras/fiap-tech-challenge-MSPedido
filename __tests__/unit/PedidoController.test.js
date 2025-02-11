@@ -164,12 +164,37 @@ describe('PedidoController - Testes de Erro', () => {
     expect(res.json).toHaveBeenCalledWith({ error: 'Erro ao deletar pedido' });
   });
 
+  test('Deve retornar 400 se o status informado for inválido', async () => {
+    req.params.id = '123';
+    req.body.status = 'invalido';
+
+    await pedidoController.atualizarStatusPedido(req, res, next);
+
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith({ message: 'Status Inválido' });
+  });
+
+  test('Deve retornar 404 se o pedido não for encontrado ao atualizar o status', async () => {
+    pedidoServiceMock.atualizarStatusPedido.mockResolvedValue({ modifiedCount: 0 });
+
+    req.params.id = '123';
+    req.body.status = 'Pronto';
+
+    await pedidoController.atualizarStatusPedido(req, res, next);
+
+    expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.json).toHaveBeenCalledWith({ message: 'Pedido não encontrado' });
+  });
+
   test('Deve retornar 500 se houver erro ao atualizar status do pedido', async () => {
-    pedidoServiceMock.atualizarStatusPedido.mockRejectedValue(new Error('Erro ao atualizar status'));
+    pedidoServiceMock.atualizarStatusPedido.mockRejectedValue(new Error('Erro no banco'));
+
+    req.params.id = '123';
+    req.body.status = 'Pronto';
 
     await pedidoController.atualizarStatusPedido(req, res, next);
 
     expect(res.status).toHaveBeenCalledWith(500);
-    expect(res.json).toHaveBeenCalledWith({ error: 'Erro ao atualizar status' });
+    expect(res.json).toHaveBeenCalledWith({ error: 'Erro no banco' });
   });
 });

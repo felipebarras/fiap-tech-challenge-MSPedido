@@ -1,6 +1,3 @@
-const { json } = require('body-parser');
-const { ObjectId } = require('mongodb');
-
 class PedidoService {
   constructor(customerAPI, produtoAPI, mongoDbRepository) {
     this.customerAPI = customerAPI;
@@ -88,7 +85,7 @@ class PedidoService {
   async deletarPedidoPorId(pedidoId) {
     try {
       const pedido = await this.mongoDbRepository.deletarPedidoPorId(pedidoId);
-      if (!pedido) throw new Error('Pedido não encontrado');
+      if (pedido.deletedCount === 0) throw new Error('Pedido não encontrado');
 
       return pedido;
     } catch (err) {
