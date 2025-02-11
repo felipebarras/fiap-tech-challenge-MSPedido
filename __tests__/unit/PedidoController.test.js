@@ -20,7 +20,7 @@ describe('PedidoController - Testes', () => {
   });
 
   it('Deve criar um novo pedido', async () => {
-    const pedidoMock = { clienteCPF: '12345678910', pedidoId: '123', itens: [{ produtoId: '1', quantidade: 1 }] };
+    const pedidoMock = { clienteCPF: '12345678910', pedidoId: '123', itens: [{ produtoId: 1, quantidade: 1 }] };
     pedidoServiceMock.criarPedido.mockResolvedValue(pedidoMock);
 
     req.body = pedidoMock;
