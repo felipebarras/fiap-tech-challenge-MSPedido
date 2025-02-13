@@ -31,10 +31,15 @@ app.use(express.json());
     app.use(
       '/api/v1/swagger-ui',
       (req, res, next) => {
-        const protocol = req.protocol || swaggerProtocol;
-        const host = req.get('Host') || swaggerHost;
+        const protocol = req.protocol; // "http" or "https"
+        const host = req.get('host'); // Current host (e.g., "yourdomain.com")
 
-        swaggerDocument.servers = [{ url: `${protocol}://${host}/api/v1`, description: 'Servidor do cliente' }];
+        swaggerDocument.servers = [
+          {
+            url: `${protocol}://${host}/api/v1`,
+            description: 'Current Server'
+          }
+        ];
 
         next();
       },
