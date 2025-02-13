@@ -9,7 +9,6 @@ jobs:
   sonarcloud:
     name: SonarCloud Scan
     runs-on: ubuntu-latest
-    
 
     steps:
       - name: Checkout source code
@@ -89,10 +88,10 @@ jobs:
 
       - name: Apply Kubernetes
         run: |
-          kubectl apply -f k8s/configMap.yaml
-          kubectl apply -f k8s/secret.yaml
-          kubectl apply -f k8s/serviceAccount.yaml
-          kubectl apply -f k8s/service.yaml
-          kubectl apply -f k8s/deployment.yaml
+          kubectl apply -f k8s/ConfigMap.yaml
+          kubectl apply -f k8s/Secret.yaml
+          kubectl apply -f k8s/ServiceAccount.yaml
+          kubectl apply -f k8s/Service.yaml
+          kubectl apply -f k8s/Deployment.yaml
 
         # kubectl rollout restart deployment pedido-service
