@@ -5,6 +5,6 @@ metadata:
   labels:
     app: pedido-service
 data:
-  PORT: '3000'
+  PORT: '8080'
   CUSTOMER_API_URI: 'http://a96e977bc2ccd4ba08a5014b077cf218-576037364.us-east-1.elb.amazonaws.com:8080/api/v1/cliente'
   PRODUCT_API_URI: 'http://adb0a40fac3ce4d1f8067423fef75b93-739534466.us-east-1.elb.amazonaws.com:8080/api/v1/produtos'

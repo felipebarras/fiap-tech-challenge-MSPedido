@@ -20,7 +20,7 @@ spec:
           image: 666881761373.dkr.ecr.us-east-1.amazonaws.com/order:latest
           ports:
             - name: http
-              containerPort: 3000
+              containerPort: 8080
           env:
             - name: PORT
               valueFrom:
@@ -49,12 +49,12 @@ spec:
           livenessProbe:
             httpGet:
               path: /api/v1/health
-              port: 3000
+              port: 8080
             initialDelaySeconds: 10
             periodSeconds: 10
           readinessProbe:
             httpGet:
               path: /api/v1/health
-              port: 3000
+              port: 8080
             initialDelaySeconds: 10
             periodSeconds: 10
