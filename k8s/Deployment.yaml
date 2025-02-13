@@ -5,7 +5,7 @@ metadata:
   labels:
     app: pedido-service
 spec:
-  recplicas: 1
+  replicas: 1
   selector:
     matchLabels:
       app: pedido-service
