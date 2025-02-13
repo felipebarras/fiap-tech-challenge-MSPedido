@@ -1,57 +1,95 @@
-# name: CI/CD - Build and Deploy to EKS
+name: CI/CD - Build and Deploy to EKS
 
-# on:
-#   push:
-#     branches:
-#       - main
+on:
+  push:
+    branches:
+      - main
 
-# jobs:
-#   build_and_push:
-#     name: Build, Push to ECR, and Deploy to EKS
-#     runs-on: ubuntu-latest
+jobs:
+  sonarcloud:
+    name: SonarCloud Scan
+    runs-on: ubuntu-latest
 
-#     steps:
-#       - name: Checkout repository
-#         uses: actions/checkout@v3
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
 
-#       # Iniciando com credenciais adicionadas anteriormente
-#       - name: Configure AWS credentials
-#         uses: aws-actions/configure-aws-credentials@v1
-#         with:
-#           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#           aws-region: us-east-1
+      - name: Set up JDK 17 (necessário para o Sonar)
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
 
-#       # Login no Amazon ECR
-#       - name: Login to Amazon ECR
-#         id: login-ecr
-#         uses: aws-actions/amazon-ecr-login@v1
+      - name: Cache SonarQube packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
 
-#       # Buildando a imagem docker
-#       - name: Build Docker Image
-#         run: |
-#           docker build -t order:latest .
+      - name: Cache SonarQube scanner
+        id: cache-sonar-scanner
+        uses: actions/cache@v3
+        with:
+          path: ~/.sonar-scanner
+          key: ${{ runner.os }}-sonar-scanner
 
-#       # Enviar a imagem para o ECR
-#       - name: Push Docker Image to Amazon ECR
-#         env:
-#           ECR_URL: 666881761373.dkr.ecr.us-east-1.amazonaws.com/order #Alterar se necessário
-#         run: |
-#           docker tag order:latest $ECR_URL:latest
-#           docker push $ECR_URL:latest
+      - name: SonarCloud Scan
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          npx sonarqube-scanner \
+            -Dsonar.organization=ms-pedido \
+            -Dsonar.projectKey=felipebarras_fiap-tech-challenge-MSPedido \
+            -Dsonar.sources=src \
+            -Dsonar.exclusions=src/__tests__/** \
+            -Dsonar.host.url=https://sonarcloud.io
 
-#       - name: Configure Kubectl
-#         env:
-#           EKS_CLUSTER_NAME: EKS-fiap-tech-challenge
-#         run: |
-#           aws eks update-kubeconfig --region us-east-1 --name $EKS_CLUSTER_NAME
+  build_and_push:
+    name: Build, Push to ECR, and Deploy to EKS
+    runs-on: ubuntu-latest
 
-#       - name: Apply Kubernetes
-#         run: |
-#           kubectl apply -f k8s/configMap.yaml
-#           kubectl apply -f k8s/secret.yaml
-#           kubectl apply -f k8s/serviceAccount.yaml
-#           kubectl apply -f k8s/service.yaml
-#           kubectl apply -f k8s/deployment.yaml
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-#         # kubectl rollout restart deployment pedido-service
+      # Iniciando com credenciais adicionadas anteriormente
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      # Login no Amazon ECR
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      # Buildando a imagem docker
+      - name: Build Docker Image
+        run: |
+          docker build -t order:latest .
+
+      # Enviar a imagem para o ECR
+      - name: Push Docker Image to Amazon ECR
+        env:
+          ECR_URL: 666881761373.dkr.ecr.us-east-1.amazonaws.com/order
+        run: |
+          docker tag order:latest $ECR_URL:latest
+          docker push $ECR_URL:latest
+
+      - name: Configure Kubectl
+        env:
+          EKS_CLUSTER_NAME: EKS-fiap-tech-challenge
+        run: |
+          aws eks update-kubeconfig --region us-east-1 --name $EKS_CLUSTER_NAME
+
+      - name: Apply Kubernetes
+        run: |
+          kubectl apply -f k8s/configMap.yaml
+          kubectl apply -f k8s/secret.yaml
+          kubectl apply -f k8s/serviceAccount.yaml
+          kubectl apply -f k8s/service.yaml
+          kubectl apply -f k8s/deployment.yaml
+
+        # kubectl rollout restart deployment pedido-service
