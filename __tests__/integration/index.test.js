@@ -81,14 +81,16 @@ describe('API - Testes de integração do Index.js', () => {
 
   // testes por fim
 
-  test('Deve configurar o swaggerDocument.servers corretamente', async () => {
-    const response = await request(app).get('/api/v1/swagger-ui');
+  test('Deve atualizar a configuração do Swagger com o host correto', async () => {
+    const mockHost = 'localhost:8080';
 
-    expect(swaggerDocument.servers).toEqual([{ url: 'http://127.0.0.1/api/v1', description: 'Current Server' }]);
+    await request(app).get('/api/v1/swagger-ui').set('host', mockHost);
+
+    expect(swaggerDocument.servers).toEqual([{ url: `http://${mockHost}/api/v1`, description: 'Current Server' }]);
   });
 
   test('Deve retornar status 200 para a rota do Swagger UI', async () => {
-    const response = await request(app).get('/api/v1/swagger-ui');
+    const response = await request(app).get('/api/v1/swagger-ui/');
 
     expect(response.status).toBe(200);
   });
