@@ -3,11 +3,11 @@ kind: Service
 metadata:
   name: pedido-service
   labels:
-    app: pedido-service
+    app: pedido-app
 spec:
   type: LoadBalancer
   selector:
-    app: pedido-service
+    app: pedido-app
   ports:
     - protocol: TCP
       port: 3000

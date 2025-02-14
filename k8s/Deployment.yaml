@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pedido-service
+  name: pedido-deployment
   labels:
-    app: pedido-service
+    app: pedido-app
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: pedido-service
+      app: pedido-app
   template:
     metadata:
       labels:
-        app: pedido-service
+        app: pedido-app
     spec:
       serviceAccountName: pedido-service-account # AWS IAM
       containers:
-        - name: pedido-container
+        - name: pedido-app
           image: 666881761373.dkr.ecr.us-east-1.amazonaws.com/order:latest
           ports:
             - name: http
@@ -34,12 +34,12 @@ spec:
                   key: MONGO_URI_ONLINE
             - name: CUSTOMER_API_URI
               valueFrom:
-                secretKeyRef:
+                configMapKeyRef:
                   name: pedido-config
                   key: CUSTOMER_API_URI
             - name: PRODUCT_API_URI
               valueFrom:
-                secretKeyRef:
+                configMapKeyRef:
                   name: pedido-config
                   key: PRODUCT_API_URI
           resources:
