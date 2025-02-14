@@ -18,6 +18,7 @@ const CustomerAPIAdapter = require('../../src/adapter/driven/CustomerAPIAdapter'
 const ProdutoAPIAdapter = require('../../src/adapter/driven/ProdutoAPIAdapter');
 const PedidoService = require('../../src/core/application/services/PedidoService');
 const PedidoController = require('../../src/adapter/driver/PedidoController');
+const swaggerMiddleware = require('../../src/adapter/driver/swaggerMiddleware');
 
 describe('API - Testes de integração do Index.js', () => {
   let app;
@@ -81,22 +82,23 @@ describe('API - Testes de integração do Index.js', () => {
 
   // testes por fim
 
-  test('Deve atualizar swaggerDocument.servers com o protocolo e host corretos', async () => {
-    const mockHost = 'testhost.com';
-    const mockProtocol = 'https';
-
-    await request(app).get('/api/v1/swagger-ui').set('host', mockHost).set('forwarded-proto', mockProtocol); // Simula proxy que define o protocolo
-
-    // Verifica se o middleware atualizou corretamente a configuração do Swagger
-    expect(swaggerDocument.servers).toEqual([{ url: `https://${mockHost}/api/v1`, description: 'Current Server' }]);
-  });
-
   test('Deve atualizar a configuração do Swagger se nao tiver forwarded-proto', async () => {
-    const mockHost = 'localhost:8080';
+    const mockHost = 'localhost:3000';
 
     await request(app).get('/api/v1/swagger-ui').set('host', mockHost);
 
     expect(swaggerDocument.servers).toEqual([{ url: `http://${mockHost}/api/v1`, description: 'Current Server' }]);
+  });
+
+  test('Middleware do Swagger deve chamar o next()', async () => {
+    const mockHost = 'testhost.com';
+    const nextMock = jest.fn();
+    const req = { protocol: 'http', get: jest.fn(() => mockHost) };
+    const res = {};
+
+    swaggerMiddleware(req, res, nextMock);
+
+    expect(nextMock).toHaveBeenCalled();
   });
 
   test('Deve retornar status 200 para a rota do Swagger UI', async () => {

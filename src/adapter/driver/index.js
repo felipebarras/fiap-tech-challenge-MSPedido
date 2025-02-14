@@ -8,6 +8,7 @@ const PedidoController = require('./PedidoController');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('../../swagger/swagger.json');
 const { port } = require('../../shared/env');
+const swaggerMiddleware = require('./swaggerMiddleware');
 
 const app = express();
 app.use(express.json());
@@ -28,24 +29,7 @@ app.use(express.json());
     const pedidoController = new PedidoController(pedidoService);
 
     // rota do swagger
-    app.use(
-      '/api/v1/swagger-ui',
-      (req, res, next) => {
-        const protocol = req.protocol; // "http" or "https"
-        const host = req.get('host'); // Current host (e.g., "yourdomain.com")
-
-        swaggerDocument.servers = [
-          {
-            url: `${protocol}://${host}/api/v1`,
-            description: 'Current Server'
-          }
-        ];
-
-        next();
-      },
-      swaggerUi.serve,
-      swaggerUi.setup(swaggerDocument)
-    );
+    app.use('/api/v1/swagger-ui', swaggerMiddleware, swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
     // rotas da API
     app.get('/api/v1/health', (req, res, next) => pedidoController.healthCheck(req, res, next));

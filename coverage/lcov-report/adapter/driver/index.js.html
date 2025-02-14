@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">68.75% </span>
+                <span class="strong">75.55% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>33/48</span>
+                <span class='fraction'>34/45</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">18.18% </span>
+                <span class="strong">20% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>2/11</span>
+                <span class='fraction'>2/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">80% </span>
+                <span class="strong">89.18% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>32/40</span>
+                <span class='fraction'>33/37</span>
             </div>
         
             
@@ -122,23 +122,8 @@
 <a name='L57'></a><a href='#L57'>57</a>
 <a name='L58'></a><a href='#L58'>58</a>
 <a name='L59'></a><a href='#L59'>59</a>
-<a name='L60'></a><a href='#L60'>60</a>
-<a name='L61'></a><a href='#L61'>61</a>
-<a name='L62'></a><a href='#L62'>62</a>
-<a name='L63'></a><a href='#L63'>63</a>
-<a name='L64'></a><a href='#L64'>64</a>
-<a name='L65'></a><a href='#L65'>65</a>
-<a name='L66'></a><a href='#L66'>66</a>
-<a name='L67'></a><a href='#L67'>67</a>
-<a name='L68'></a><a href='#L68'>68</a>
-<a name='L69'></a><a href='#L69'>69</a>
-<a name='L70'></a><a href='#L70'>70</a>
-<a name='L71'></a><a href='#L71'>71</a>
-<a name='L72'></a><a href='#L72'>72</a>
-<a name='L73'></a><a href='#L73'>73</a>
-<a name='L74'></a><a href='#L74'>74</a>
-<a name='L75'></a><a href='#L75'>75</a>
-<a name='L76'></a><a href='#L76'>76</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L60'></a><a href='#L60'>60</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -169,23 +154,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -223,6 +191,7 @@ const PedidoController = require('./PedidoController');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('../../swagger/swagger.json');
 const { port } = require('../../shared/env');
+const swaggerMiddleware = require('./swaggerMiddleware');
 &nbsp;
 const app = express();
 app.use(express.json());
@@ -243,24 +212,7 @@ app.use(express.json());
     const pedidoController = new PedidoController(pedidoService);
 &nbsp;
     // rota do swagger
-    app.use(
-      '/api/v1/swagger-ui',
-<span class="fstat-no" title="function not covered" >      (r</span>eq, res, next) =&gt; {
-        const protocol = <span class="cstat-no" title="statement not covered" >req.protocol;</span> // "http" or "https"
-        const host = <span class="cstat-no" title="statement not covered" >req.get('host');</span> // Current host (e.g., "yourdomain.com")
-&nbsp;
-<span class="cstat-no" title="statement not covered" >        swaggerDocument.servers = [</span>
-          {
-            url: `${protocol}://${host}/api/v1`,
-            description: 'Current Server'
-          }
-        ];
-&nbsp;
-<span class="cstat-no" title="statement not covered" >        next();</span>
-      },
-      swaggerUi.serve,
-      swaggerUi.setup(swaggerDocument)
-    );
+    app.use('/api/v1/swagger-ui', swaggerMiddleware, swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 &nbsp;
     // rotas da API
     app.get('/api/v1/health', <span class="fstat-no" title="function not covered" >(r</span>eq, res, next) =&gt; <span class="cstat-no" title="statement not covered" >pedidoController.healthCheck(req, res, next))</span>;
@@ -295,7 +247,7 @@ module.exports = app;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-02-14T04:46:20.231Z
+                at 2025-02-14T22:58:19.869Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
