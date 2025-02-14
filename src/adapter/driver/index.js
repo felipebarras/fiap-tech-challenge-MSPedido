@@ -31,8 +31,6 @@ app.use(express.json());
     app.use(
       '/api/v1/swagger-ui',
       (req, res, next) => {
-        const protocol = req.protocol;
-        const host = req.get('Host');
         const protocol = req.protocol; // "http" or "https"
         const host = req.get('host'); // Current host (e.g., "yourdomain.com")
 
