@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: pedido-config
   labels:
-    app: pedido-service
+    app: pedido-app
 data:
   PORT: '3000'
   CUSTOMER_API_URI: 'http://a96e977bc2ccd4ba08a5014b077cf218-576037364.us-east-1.elb.amazonaws.com:8080/api/v1/cliente'
