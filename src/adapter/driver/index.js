@@ -31,8 +31,8 @@ app.use(express.json());
     app.use(
       '/api/v1/swagger-ui',
       (req, res, next) => {
-        const protocol = req.protocol || swaggerProtocol;
-        const host = req.get('Host') || swaggerHost;
+        const protocol = req.protocol;
+        const host = req.get('Host');
 
         swaggerDocument.servers = [{ url: `${protocol}://${host}/api/v1`, description: 'Servidor do cliente' }];
 
