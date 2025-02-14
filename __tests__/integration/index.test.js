@@ -78,7 +78,7 @@ describe('API - Testes de integração do Index.js', () => {
   test('Deve configurar o swaggerDocument.servers corretamente', async () => {
     const response = await request(app).get('/api/v1/swagger-ui');
 
-    expect(swaggerDocument.servers).toEqual([{ url: `127.0.0.1/api/v1`, description: 'Current Server' }]);
+    expect(swaggerDocument.servers).toEqual([{ url: `http://127.0.0.1/api/v1`, description: 'Current Server' }]);
   });
 
   test('Deve criar um pedido e retornar um 201', async () => {
