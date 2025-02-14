@@ -46,8 +46,8 @@ spec:
                   key: PRODUCT_API_URI
           resources:
             limits:
-              cpu: 2000m
-              memory: 2048Mi
+              cpu: 500m
+              memory: 512Mi
           livenessProbe:
             httpGet:
               path: /api/v1/health
