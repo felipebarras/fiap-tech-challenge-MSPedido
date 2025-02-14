@@ -21,8 +21,10 @@ const PedidoController = require('../../src/adapter/driver/PedidoController');
 
 describe('API - Testes de integração do Index.js', () => {
   let app;
+  let originalServers;
 
   beforeAll(async () => {
+    originalServers = swaggerDocument.servers;
     connectToMongo.mockResolvedValue({ databaseName: 'test_db' });
 
     const pedidoRepositoryMock = new MongoPedidoRepository();
@@ -75,7 +77,15 @@ describe('API - Testes de integração do Index.js', () => {
     app.patch('/api/v1/pedidos/:id/status', pedidoControllerMock.atualizarStatusPedido);
   });
 
+  afterAll(() => (swaggerDocument.servers = originalServers));
+
   // testes por fim
+
+  test('Deve configurar o swaggerDocument.servers corretamente', async () => {
+    const response = await request(app).get('/api/v1/swagger-ui');
+
+    expect(swaggerDocument.servers).toEqual([{ url: 'http://127.0.0.1/api/v1', description: 'Current Server' }]);
+  });
 
   test('Deve retornar status 200 para a rota do Swagger UI', async () => {
     const response = await request(app).get('/api/v1/swagger-ui');
