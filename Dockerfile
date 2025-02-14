@@ -12,7 +12,7 @@ RUN npm install
 
 COPY --chown=node:node . .
 
-EXPOSE 8080
+EXPOSE 3000
 
 # esse é o comando para rodar o Microsserviço
 CMD ["node", "src/adapter/driver/index.js"]
