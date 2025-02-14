@@ -43,6 +43,25 @@ describe('API - Testes de integração do Index.js', () => {
     app = express();
     app.use(express.json());
 
+    app.use(
+      '/api/v1/swagger-ui',
+      (req, res, next) => {
+        const protocol = req.protocol; // "http" or "https"
+        const host = req.get('host'); // Current host (e.g., "yourdomain.com")
+
+        swaggerDocument.servers = [
+          {
+            url: `${protocol}://${host}/api/v1`,
+            description: 'Current Server'
+          }
+        ];
+
+        next();
+      },
+      swaggerUi.serve,
+      swaggerUi.setup(swaggerDocument)
+    );
+
     // rotas mockadas
     app.post('/api/v1/pedidos', pedidoControllerMock.criarPedido);
     app.get('/api/v1/pedidos', pedidoControllerMock.listarPedidos);
@@ -55,6 +74,12 @@ describe('API - Testes de integração do Index.js', () => {
   });
 
   // testes por fim
+
+  test('Deve configurar o swaggerDocument.servers corretamente', async () => {
+    const response = await request(app).get('/api/v1/swagger-ui');
+
+    expect(swaggerDocument.servers).toEqual([{ url: `127.0.0.1/api/v1`, description: 'Current Server' }]);
+  });
 
   test('Deve criar um pedido e retornar um 201', async () => {
     const pedidoMock = { clienteCPF: '1235678910', itens: [{ produtoId: 1, quantidade: 2 }], status: 'Pendente' };
