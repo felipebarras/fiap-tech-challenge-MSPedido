@@ -43,9 +43,12 @@ spec:
                   name: pedido-config
                   key: PRODUCT_API_URI
           resources:
+            requests:
+              cpu: '500m'
+              memory: '512Mi'
             limits:
-              cpu: 2000m
-              memory: 2048Mi
+              cpu: '1000m'
+              memory: '1024Mi'
           livenessProbe:
             httpGet:
               path: /api/v1/health
