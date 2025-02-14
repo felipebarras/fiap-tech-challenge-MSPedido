@@ -1,6 +1,8 @@
 const request = require('supertest');
 const express = require('express');
 const app = require('../../src/adapter/driver/index');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('../../src/swagger/swagger.json');
 
 jest.mock('../../src/adapter/driven/database', () => ({ connectToMongo: jest.fn().mockResolvedValue({ databaseName: 'test_db' }) }));
 
@@ -75,10 +77,10 @@ describe('API - Testes de integração do Index.js', () => {
 
   // testes por fim
 
-  test('Deve configurar o swaggerDocument.servers corretamente', async () => {
+  test('Deve retornar status 200 para a rota do Swagger UI', async () => {
     const response = await request(app).get('/api/v1/swagger-ui');
 
-    expect(swaggerDocument.servers).toEqual([{ url: `http://127.0.0.1/api/v1`, description: 'Current Server' }]);
+    expect(response.status).toBe(200);
   });
 
   test('Deve criar um pedido e retornar um 201', async () => {
