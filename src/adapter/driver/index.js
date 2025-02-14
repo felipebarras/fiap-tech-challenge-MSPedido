@@ -33,8 +33,15 @@ app.use(express.json());
       (req, res, next) => {
         const protocol = req.protocol;
         const host = req.get('Host');
+        const protocol = req.protocol; // "http" or "https"
+        const host = req.get('host'); // Current host (e.g., "yourdomain.com")
 
-        swaggerDocument.servers = [{ url: `${protocol}://${host}/api/v1`, description: 'Servidor do cliente' }];
+        swaggerDocument.servers = [
+          {
+            url: `${protocol}://${host}/api/v1`,
+            description: 'Current Server'
+          }
+        ];
 
         next();
       },
