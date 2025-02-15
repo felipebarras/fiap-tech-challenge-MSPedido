@@ -6,5 +6,5 @@ metadata:
     app: pedido-app
 data:
   PORT: '3000'
-  CUSTOMER_API_URI: 'http://a96e977bc2ccd4ba08a5014b077cf218-576037364.us-east-1.elb.amazonaws.com:8080/api/v1/cliente'
-  PRODUCT_API_URI: 'http://adb0a40fac3ce4d1f8067423fef75b93-739534466.us-east-1.elb.amazonaws.com:8080/api/v1/produtos'
+  CUSTOMER_API_URI: 'http://a2d71c620ce534f20ad6b9c24a3f2cde-1281406927.us-east-1.elb.amazonaws.com:8080/api/v1/cliente'
+  PRODUCT_API_URI: 'http://ab6949e5e906d46cf815bc816e2814f6-446211351.us-east-1.elb.amazonaws.com:8080/api/v1/produtos'

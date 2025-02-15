@@ -75,7 +75,7 @@ jobs:
       # Enviar a imagem para o ECR
       - name: Push Docker Image to Amazon ECR
         env:
-          ECR_URL: 666881761373.dkr.ecr.us-east-1.amazonaws.com/order
+          ECR_URL: 194424007004.dkr.ecr.us-east-1.amazonaws.com/order
         run: |
           docker tag order:latest $ECR_URL:latest
           docker push $ECR_URL:latest
